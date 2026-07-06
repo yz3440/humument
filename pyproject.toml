@@ -1,0 +1,20 @@
+[project]
+name = "humument"
+version = "0.1.0"
+description = "Computational Humument: an erasure-poetry generator over Mallock's A Human Document"
+requires-python = ">=3.11"
+dependencies = [
+    "pymupdf>=1.24",
+    "ocrmac>=1.0",
+    "pillow>=10.0",
+    "numpy>=2.4.4",
+    "spacy>=3.8.14",
+    "wordfreq>=3.1.1",
+    "scipy>=1.17.1",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[tool.uv]
+package = false
