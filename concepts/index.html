@@ -57,7 +57,8 @@
 
 
 
-     
+    
+    <link href="../assets/extra.css" rel="stylesheet">  
     
     
 
@@ -401,7 +402,7 @@
             <main id="terminal-mkdocs-main-content">
 <section id="mkdocs-terminal-content">
     <h1 id="concepts">Concepts<a class="headerlink" href="#concepts" title="Permanent link">#</a></h1>
-<p>The vocabulary <code>humument-lib</code> uses, and how the pieces fit together. Every term
+<p>The vocabulary <code>humument</code> uses, and how the pieces fit together. Every term
 here maps to a concrete type in <a href="https://github.com/yz3440/humument/blob/main/humument-lib/src/types.ts"><code>src/types.ts</code></a>
 and a section of the <a href="../api/">Library API</a>.</p>
 <h2 id="coordinate-system">Coordinate system<a class="headerlink" href="#coordinate-system" title="Permanent link">#</a></h2>
@@ -458,7 +459,7 @@ rivers without any image analysis at runtime. Three related structures:</p>
 <p>See <a href="../api/pages/">Pages &amp; Words</a> for the exact shapes.</p>
 <h2 id="rivers">Rivers<a class="headerlink" href="#rivers" title="Permanent link">#</a></h2>
 <p>A <strong>river</strong> is a path of whitespace connecting two kept words — the hand-drawn
-line Phillips runs between the words he keeps. <code>humument-lib</code> finds them two
+line Phillips runs between the words he keeps. <code>humument</code> finds them two
 ways (<a href="../api/rivers/">Rivers</a>):</p>
 <ul>
 <li><strong><code>H.river.between(a, b)</code></strong> — Dijkstra over the whitespace graph. Constrained

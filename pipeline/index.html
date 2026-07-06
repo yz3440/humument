@@ -57,7 +57,8 @@
 
 
 
-     
+    
+    <link href="../assets/extra.css" rel="stylesheet">  
     
     
 
@@ -403,9 +404,13 @@
     <h1 id="the-pipeline">The Pipeline<a class="headerlink" href="#the-pipeline" title="Permanent link">#</a></h1>
 <p>The CV/OCR pipeline turns the source scanned PDF into the canonical OCR database
 and the normalized page images that the npm packages ship. <strong>Consumers of
-<code>humument-lib</code> never run this</strong> — the data is published on npm. You only need the
+<code>humument</code> never run this</strong> — the data is published on npm. You only need the
 pipeline to rebuild the dataset (e.g. after swapping the source scan or changing
 the OCR logic).</p>
+<p><img alt="Six pages of A Human Document, each shown at the four CV pipeline stages — raw scan, deskewed and cropped, normalized black-and-white, and whitespace-plus-features analysis" src="../assets/pipeline-stages.jpg" /></p>
+<p><em>The stages below across six pages — one row each: <strong>01a</strong> raw scan → <strong>01c</strong>
+deskewed &amp; cropped → <strong>01d</strong> normalized B&amp;W → <strong>01e + 02</strong> word-rarity features +
+whitespace graph. Read a column to follow one page through the pipeline.</em></p>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">#</a></h2>
 <ul>
 <li><strong>macOS</strong> — OCR is done locally with Apple Vision (via <code>ocrmac</code>); there are no
@@ -481,6 +486,9 @@ run by the <a href="https://github.com/yz3440/humument/blob/main/Makefile"><code
 </tr>
 </tbody>
 </table>
+<p><img alt="A grid of normalized page scans sampled across the 367-page book" src="../assets/dataset-grid.jpg" /></p>
+<p><em>The output of stage 01d — 367 normalized B&amp;W pages (a sample spread across the
+book), published as <a href="../data/packages/"><code>humument-images</code></a>.</em></p>
 <h2 id="the-canonical-database">The canonical database<a class="headerlink" href="#the-canonical-database" title="Permanent link">#</a></h2>
 <p><code>data/humument.db</code> is a <strong>SQLite</strong> database, keyed by <code>page_num</code> (1–367), and is
 the source of truth. Its six tables — <code>pages</code>, <code>words</code>, <code>page_corrections</code>,

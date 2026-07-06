@@ -1,0 +1,5 @@
+/* Keep figures (pipeline collages) responsive in the terminal theme. */
+img {
+  max-width: 100%;
+  height: auto;
+}

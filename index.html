@@ -57,7 +57,8 @@
 
 
 
-     
+    
+    <link href="assets/extra.css" rel="stylesheet">  
     
     
 
@@ -411,6 +412,11 @@ a scanned book page and drawing balloons and rivers of type around them —
 programmatically, this project gives you the whole book (every page's words,
 OCR boxes, and whitespace geometry) with <strong>zero configuration</strong>, ready to render
 with any 2D API.</p>
+<p><img alt="Six pages of A Human Document, each shown at the four CV pipeline stages — raw scan, deskewed and cropped, normalized black-and-white, and whitespace-plus-features analysis" src="assets/pipeline-stages.jpg" /></p>
+<p><em>The CV pipeline across six pages — one row per stage: <strong>1</strong> raw scan → <strong>2</strong>
+deskewed &amp; cropped → <strong>3</strong> normalized B&amp;W → <strong>4</strong> whitespace graph + word-rarity
+features (rarest words highlighted). Read a column top-to-bottom to watch one page
+get aligned, cleaned, and analysed.</em></p>
 <h2 id="what-is-erasure-poetry">What is erasure poetry?<a class="headerlink" href="#what-is-erasure-poetry" title="Permanent link">#</a></h2>
 <p>Tom Phillips took a forgotten Victorian novel and, page by page, painted over
 almost all of it — leaving a scattered handful of words connected by hand-drawn
@@ -439,7 +445,7 @@ re-deriving any geometry. See <a href="concepts/">Concepts</a> for the full voca
 </thead>
 <tbody>
 <tr>
-<td><a href="api/"><code>humument-lib</code></a></td>
+<td><a href="api/"><code>humument</code></a></td>
 <td>Renderer-agnostic erasure-poetry primitives (words, OCR boxes, whitespace rivers, balloon/ribbon geometry). Zero runtime deps.</td>
 <td>~230 KB</td>
 </tr>
@@ -455,7 +461,7 @@ re-deriving any geometry. See <a href="concepts/">Concepts</a> for the full voca
 </tr>
 </tbody>
 </table>
-<p><code>humument-lib</code>'s defaults fetch <code>humument-data</code> and <code>humument-images</code> straight
+<p><code>humument</code>'s defaults fetch <code>humument-data</code> and <code>humument-images</code> straight
 from the <a href="https://www.jsdelivr.com/">jsDelivr</a> CDN, so <code>Humument.load({ page: 33 })</code>
 works from any origin without hosting anything. See
 <a href="data/packages/">npm Packages</a> for why data and images ship separately.</p>

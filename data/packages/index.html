@@ -57,7 +57,8 @@
 
 
 
-     
+    
+    <link href="../../assets/extra.css" rel="stylesheet">  
     
     
 
@@ -390,7 +391,7 @@
 <nav>
     <ul>
         <li><a href="#npm-packages">npm Packages</a></li>
-        <li><a href="#humument-lib">humument-lib</a></li><li><a href="#humument-data">humument-data</a></li><li><a href="#humument-images">humument-images</a></li><li><a href="#why-data-and-images-are-separate-packages">Why data and images are separate packages</a></li><li><a href="#versioning">Versioning</a></li><li><a href="#how-theyre-built">How they're built</a></li>
+        <li><a href="#humument">humument</a></li><li><a href="#humument-data">humument-data</a></li><li><a href="#humument-images">humument-images</a></li><li><a href="#why-data-and-images-are-separate-packages">Why data and images are separate packages</a></li><li><a href="#versioning">Versioning</a></li><li><a href="#how-theyre-built">How they're built</a></li>
     </ul>
 </nav>
 </aside>
@@ -410,8 +411,8 @@ other two are the data it fetches from a CDN.</p>
 </thead>
 <tbody>
 <tr>
-<td><a href="https://www.npmjs.com/package/humument-lib"><code>humument-lib</code></a></td>
-<td><code>0.2.0</code></td>
+<td><a href="https://www.npmjs.com/package/humument"><code>humument</code></a></td>
+<td><code>0.1.0</code></td>
 <td>The TypeScript library — renderer-agnostic erasure-poetry primitives.</td>
 <td>~230 KB</td>
 </tr>
@@ -429,16 +430,16 @@ other two are the data it fetches from a CDN.</p>
 </tr>
 </tbody>
 </table>
-<h2 id="humument-lib"><code>humument-lib</code><a class="headerlink" href="#humument-lib" title="Permanent link">#</a></h2>
+<h2 id="humument"><code>humument</code><a class="headerlink" href="#humument" title="Permanent link">#</a></h2>
 <p>The only package you install. Zero runtime dependencies. Ships ESM
 (<code>dist/index.js</code>) plus an IIFE bundle (<code>dist/index.global.js</code>) that exposes a
 <code>HumumentLib</code> global for no-build <code>&lt;script&gt;</code> use. See
 <a href="../../quickstart/">Quick Start</a> and the <a href="../../api/">Library API</a>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>npm<span class="w"> </span>install<span class="w"> </span>humument-lib
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>npm<span class="w"> </span>install<span class="w"> </span>humument
 </code></pre></div>
 <h2 id="humument-data"><code>humument-data</code><a class="headerlink" href="#humument-data" title="Permanent link">#</a></h2>
 <p>The data layer: <code>catalog.json</code>, <code>search-index.json</code>, and one gzipped JSON per
-printed page under <code>db/pages/pNNNN.json.gz</code>. <code>humument-lib</code> fetches it by default
+printed page under <code>db/pages/pNNNN.json.gz</code>. <code>humument</code> fetches it by default
 from jsDelivr; you rarely reference it directly. Its exact shapes are the
 <a href="../format/">Data Format</a>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>https://cdn.jsdelivr.net/npm/humument-data@0.1/db/…
@@ -457,14 +458,14 @@ page is 1:1.</p>
   ~126 MB and the raw page JSON is ~159 MB — together they'd blow the ceiling.
   Splitting them keeps each package comfortably under it.</li>
 <li><strong>The page JSON ships gzipped</strong> (<code>.json.gz</code> only), which brings the ~159 MB raw
-  set down to ~26 MB. <code>humument-lib</code> decodes it with <code>DecompressionStream</code> and
+  set down to ~26 MB. <code>humument</code> decodes it with <code>DecompressionStream</code> and
   falls back to plain <code>.json</code> for self-hosted exports (see
   <a href="../format/#gzip-twin">Data Format → Gzip twin</a>).</li>
 </ul>
-<p>Because both are on jsDelivr and <code>humument-lib</code> points at them by default,
+<p>Because both are on jsDelivr and <code>humument</code> points at them by default,
 <code>Humument.load({ page })</code> works from any origin with nothing self-hosted.</p>
 <h2 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">#</a></h2>
-<p><code>humument-lib</code>'s CDN defaults float on the <strong><code>@0.1</code></strong> tag of the data/images
+<p><code>humument</code>'s CDN defaults float on the <strong><code>@0.1</code></strong> tag of the data/images
 packages (<code>CDN_DATA_BASE</code> / <code>CDN_IMAGE_BASE</code>), so a data fix reaches sketches
 without a library release. Pin a different origin or version by passing
 <code>dataBase</code> / <code>imageBase</code> to <a href="../../api/loading/#overriding-the-data-source"><code>Humument.load</code></a>.</p>

@@ -57,7 +57,8 @@
 
 
 
-     
+    
+    <link href="../assets/extra.css" rel="stylesheet">  
     
     
 
@@ -397,10 +398,10 @@
             <main id="terminal-mkdocs-main-content">
 <section id="mkdocs-terminal-content">
     <h1 id="library-api-overview">Library API — Overview<a class="headerlink" href="#library-api-overview" title="Permanent link">#</a></h1>
-<p><code>humument-lib</code> exposes one object, <strong><code>Humument</code></strong>, plus a rich re-export of
+<p><code>humument</code> exposes one object, <strong><code>Humument</code></strong>, plus a rich re-export of
 types. You load a page and get back an <strong><code>H</code> instance</strong> (<code>HumumentInstance</code>)
 whose members are the whole toolkit.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Humument</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;humument-lib&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// CDN: const { Humument } = HumumentLib;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Humument</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;humument&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">// CDN: const { Humument } = HumumentLib;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">H</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Humument</span><span class="p">.</span><span class="nx">load</span><span class="p">({</span><span class="w"> </span><span class="nx">page</span><span class="o">:</span><span class="w"> </span><span class="mf">33</span><span class="w"> </span><span class="p">});</span>
 </code></pre></div>

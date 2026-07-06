@@ -57,7 +57,8 @@
 
 
 
-     
+    
+    <link href="../../assets/extra.css" rel="stylesheet">  
     
     
 
@@ -430,7 +431,7 @@ uncorrelated — use it for shuffles and discrete choices.</p>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">pick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">arr</span><span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">rnd</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">)];</span>
 </code></pre></div>
 <h2 id="why-seeded">Why seeded?<a class="headerlink" href="#why-seeded" title="Permanent link">#</a></h2>
-<p>All of <code>humument-lib</code>'s wobble/meander/shuffle is driven by these three, so
+<p>All of <code>humument</code>'s wobble/meander/shuffle is driven by these three, so
 passing the same <code>seed</code> to <a href="../chunks/#hselectchunksopts"><code>selectChunks</code></a>,
 <a href="../geometry/#hgeomballoonbbox-opts"><code>balloon</code></a>, or
 <a href="../geometry/#hgeomchannelseg-opts"><code>channel</code></a> reproduces the identical result —
