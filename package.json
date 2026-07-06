@@ -1,0 +1,5 @@
+{
+  "name": "humument",
+  "private": true,
+  "workspaces": ["humument-lib"]
+}
