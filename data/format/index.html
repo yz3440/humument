@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.1, mkdocs-terminal-4.8.0">
+    
+    <meta name="description" content="Phillips-style erasure-poetry primitives and canonical OCR data over W. H. Mallock's A Human Document (1892)"> 
+    
+    <meta name="author" content="Yufeng Zhao"> 
+    
+    <link rel="canonical" href="https://yz3440.github.io/humument/data/format/"><link rel="icon" type="image/png" sizes="192x192" href="../../img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="../../img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="../../img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon-32x32.png" />
+
+
+    
+ 
+<title>Data Format - humument</title>
+
+
+<link href="../../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../../css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../../css/normalize.css" rel="stylesheet">
+<link href="../../css/terminal.css" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet">
+<link href="../../css/theme.tile_grid.css" rel="stylesheet">
+<link href="../../css/theme.footer.css" rel="stylesheet">
+<!-- default color palette -->
+<link href="../../css/palettes/default.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+
+
+     
+    
+    
+
+    
+    <!-- search css support -->
+<link href="../../css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = "../..",
+    shortcuts = "{}";
+</script>
+<script src="../../js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="../../js/bootstrap/bootstrap.min.js" defer></script>
+<script src="../../js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="../../search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="https://yz3440.github.io/humument/" class="no-style">humument</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../.." class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../quickstart/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Quick Start</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../concepts/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Concepts</span>
+                    </a>
+                    <meta property="position" content="2">
+                </li>
+                
+                
+                
+                
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../pipeline/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">The Pipeline</span>
+                    </a>
+                    <meta property="position" content="3">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../provenance/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Provenance & License</span>
+                    </a>
+                    <meta property="position" content="4">
+                </li>
+                
+                    
+                    
+
+
+<li property="itemListElement" typeof="ListItem">
+    <a href="#" class="menu-item" data-toggle="modal" data-target="#mkdocs_search_modal" property="item" typeof="SearchAction">
+        <i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+    </a>
+    <meta property="position" content="5">
+</li>
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../..">Home</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../quickstart/">Quick Start</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../concepts/">Concepts</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        
+            
+            
+            <span class="
+        
+    terminal-mkdocs-side-nav-item terminal-mkdocs-side-nav-section-no-index">Library API</span>
+        
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../api/">Overview</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../api/loading/">Loading & Catalog</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../api/pages/">Pages & Words</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../api/chunks/">Chunks (phrase selection)</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../api/rivers/">Rivers (pathfinding)</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../api/geometry/">Geometry</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../api/noise/">Noise & Random</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        <span class="
+        
+    terminal-mkdocs-side-nav-item--active terminal-mkdocs-side-nav-section-no-index">Data & Packages</span>
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        <span class="terminal-mkdocs-side-nav-item--active">Data Format</span>
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../packages/">npm Packages</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../pipeline/">The Pipeline</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../provenance/">Provenance & License</a>
+        
+    
+    
+    
+       </li>
+        
+    </ul>
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#data-format">Data Format</a></li>
+        <li><a href="#the-files">The files</a></li><li><a href="#per-page-json-shape">Per-page JSON shape</a></li><li><a href="#the-ocr-database">The OCR database</a></li><li><a href="#building-your-own">Building your own</a></li>
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h1 id="data-format">Data Format<a class="headerlink" href="#data-format" title="Permanent link">#</a></h1>
+<p><code>Humument.load</code> fetches static JSON produced by the pipeline's
+<a href="https://github.com/yz3440/humument/blob/main/pipeline/03_export_web.py"><code>03_export_web.py</code></a>.
+You can point the loader at <a href="../../api/loading/#overriding-the-data-source">any origin</a>
+that serves these files with these shapes — the npm packages are just one such
+origin. Shapes are camelCase and match the exported <a href="../../api/#types">types</a>
+exactly, so decoding is a plain <code>JSON.parse</code>.</p>
+<h2 id="the-files">The files<a class="headerlink" href="#the-files" title="Permanent link">#</a></h2>
+<p>Given a <code>dataBase</code> and an <code>imageBase</code>:</p>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>${dataBase}/catalog.json</code></td>
+<td><code>{ "pages": number[], "chapters": [{ "pageNum", "label", "roman" }] }</code></td>
+</tr>
+<tr>
+<td><code>${dataBase}/pages/pNNNN.json</code></td>
+<td>One page: <code>{ "meta", "words"[], "gutters"[], "docks"[], "graph"[] }</code></td>
+</tr>
+<tr>
+<td><code>${dataBase}/pages/pNNNN.json.gz</code></td>
+<td>Gzipped twin of the above (tried first).</td>
+</tr>
+<tr>
+<td><code>${dataBase}/search-index.json</code></td>
+<td><code>{ "&lt;token&gt;": [[pageNum, count], …] }</code> (lowercased tokens).</td>
+</tr>
+<tr>
+<td><code>${imageBase}/pNNNN.jpg</code></td>
+<td>One page image (1400 × 2100 grayscale JPEG).</td>
+</tr>
+</tbody>
+</table>
+<p><code>NNNN</code> is the <strong>zero-padded printed page</strong>, e.g. <code>p0033</code>.</p>
+<h3 id="gzip-twin">Gzip twin<a class="headerlink" href="#gzip-twin" title="Permanent link">#</a></h3>
+<p>Page fetches try <code>pages/pNNNN.json.gz</code> first, decoding it in the browser with
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream"><code>DecompressionStream</code></a>,
+and fall back to plain <code>pNNNN.json</code>. The npm-hosted data ships <strong>only</strong> the <code>.gz</code>
+files (the plain set exceeds jsDelivr's package-size limit); a self-hosted export
+can supply either.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">dataBase</span><span class="si">}</span><span class="sb">/pages/p0033.json.gz`</span><span class="p">);</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Response</span><span class="p">(</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nx">res</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">pipeThrough</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">DecompressionStream</span><span class="p">(</span><span class="s1">&#39;gzip&#39;</span><span class="p">))</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">).</span><span class="nx">json</span><span class="p">();</span>
+</code></pre></div>
+<h2 id="per-page-json-shape">Per-page JSON shape<a class="headerlink" href="#per-page-json-shape" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>{
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  &quot;meta&quot;:   { &quot;width&quot;: 1400, &quot;height&quot;: 2100, &quot;body&quot;: {…} | null, &quot;valid&quot;: {…} | null },
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  &quot;words&quot;:  [ /* Word objects: id, text, x0,y0,x1,y1, lineIdx, conf,
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>                 prefix, suffix, pos, lemma, freq, rarity, isContent, isConnective */ ],
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  &quot;gutters&quot;:[ /* Gutter objects: gutterId, kind, lineIdxA/B, x0,y0,x1,y1,
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>                 polyline, minWidth, riverScore */ ],
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  &quot;docks&quot;:  [ /* Dock objects, one per word (decoded into a Map&lt;wordId, Dock&gt;) */ ],
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  &quot;graph&quot;:  [ /* compact node tuples: [id, x, y, edges],
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>                 edges = [ [neighborId, cost, gutterId], … ] */ ]
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>}
+</code></pre></div>
+<p>Two representations differ between the wire format and what <code>H</code> gives you:</p>
+<ul>
+<li><strong><code>docks</code></strong> ships as an array and is decoded into <code>H.docks</code>, a
+  <code>Map&lt;wordId, Dock&gt;</code>.</li>
+<li><strong><code>graph</code></strong> ships as compact <code>[id, x, y, edges]</code> tuples (the informational
+  <code>kind</code> field is dropped to save bytes) and is decoded into <code>H.graph</code>, a
+  <code>PageGraph</code> with a <code>Map&lt;id, GraphNode&gt;</code>.</li>
+</ul>
+<p>Everything else parses 1:1 into the types documented under
+<a href="../../api/pages/">Pages &amp; Words</a>. Pixel coordinates are on the 1400 × 2100
+normalized image (<a href="../../concepts/#coordinate-system">Concepts → Coordinate system</a>).</p>
+<h2 id="the-ocr-database">The OCR database<a class="headerlink" href="#the-ocr-database" title="Permanent link">#</a></h2>
+<p>The JSON above is exported from <code>data/humument.db</code>, a <strong>SQLite</strong> database keyed
+by <code>page_num</code> (1–367) — the canonical OCR artifact (see
+<a href="../../pipeline/">The Pipeline</a>). Its six tables map onto the JSON like so:</p>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Holds</th>
+<th>Exported into</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pages</code></td>
+<td><code>page_num</code>, image path, <code>width_px</code>, <code>height_px</code>.</td>
+<td><code>meta.width</code> / <code>meta.height</code></td>
+</tr>
+<tr>
+<td><code>words</code></td>
+<td>one row per OCR'd word (bbox, line, conf, punctuation, NLP columns).</td>
+<td><code>words[]</code></td>
+</tr>
+<tr>
+<td><code>page_corrections</code></td>
+<td>per-page deskew angle/offset + body/valid bboxes. Its <code>page_num</code> set <strong>is</strong> the content range.</td>
+<td><code>meta.body</code> / <code>meta.valid</code>; <code>catalog.pages</code></td>
+</tr>
+<tr>
+<td><code>page_gutters</code></td>
+<td>whitespace gutters/slits (<code>polyline_json</code>, <code>min_width</code>, <code>river_score</code>).</td>
+<td><code>gutters[]</code></td>
+</tr>
+<tr>
+<td><code>word_docks</code></td>
+<td>per-word breathing room, slack direction, <code>ports_json</code>.</td>
+<td><code>docks[]</code></td>
+</tr>
+<tr>
+<td><code>page_graph</code></td>
+<td>navigation nodes (<code>x</code>, <code>y</code>, <code>edges_json</code>).</td>
+<td><code>graph[]</code></td>
+</tr>
+</tbody>
+</table>
+<p>The <code>catalog.json</code> <code>chapters</code> are computed at export time from pages whose top
+line reads "CHAPTER &lt;Roman&gt;", and <code>search-index.json</code> is built by counting
+lowercased word tokens per page. Consumers never touch SQLite — they only see the
+static JSON.</p>
+<h2 id="building-your-own">Building your own<a class="headerlink" href="#building-your-own" title="Permanent link">#</a></h2>
+<p>To host the data yourself, run the pipeline's stage 03 (or produce equivalent
+JSON) and serve <code>output/db/</code> as <code>dataBase</code> and your page images as <code>imageBase</code>.
+See <a href="../../pipeline/">The Pipeline</a> and
+<a href="../../api/loading/#overriding-the-data-source">Overriding the data source</a>.</p>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>

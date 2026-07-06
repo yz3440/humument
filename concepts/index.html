@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.1, mkdocs-terminal-4.8.0">
+    
+    <meta name="description" content="Phillips-style erasure-poetry primitives and canonical OCR data over W. H. Mallock's A Human Document (1892)"> 
+    
+    <meta name="author" content="Yufeng Zhao"> 
+    
+    <link rel="canonical" href="https://yz3440.github.io/humument/concepts/"><link rel="icon" type="image/png" sizes="192x192" href="../img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="../img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="../img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png" />
+
+
+    
+ 
+<title>Concepts - humument</title>
+
+
+<link href="../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../css/normalize.css" rel="stylesheet">
+<link href="../css/terminal.css" rel="stylesheet">
+<link href="../css/theme.css" rel="stylesheet">
+<link href="../css/theme.tile_grid.css" rel="stylesheet">
+<link href="../css/theme.footer.css" rel="stylesheet">
+<!-- default color palette -->
+<link href="../css/palettes/default.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+
+
+     
+    
+    
+
+    
+    <!-- search css support -->
+<link href="../css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = "..",
+    shortcuts = "{}";
+</script>
+<script src="../js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="../js/bootstrap/bootstrap.min.js" defer></script>
+<script src="../js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="../search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="https://yz3440.github.io/humument/" class="no-style">humument</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href=".." class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../quickstart/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Quick Start</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="./" class="menu-item active" property="item" typeof="WebPage">
+                        <span property="name">Concepts</span>
+                    </a>
+                    <meta property="position" content="2">
+                </li>
+                
+                
+                
+                
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../pipeline/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">The Pipeline</span>
+                    </a>
+                    <meta property="position" content="3">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../provenance/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Provenance & License</span>
+                    </a>
+                    <meta property="position" content="4">
+                </li>
+                
+                    
+                    
+
+
+<li property="itemListElement" typeof="ListItem">
+    <a href="#" class="menu-item" data-toggle="modal" data-target="#mkdocs_search_modal" property="item" typeof="SearchAction">
+        <i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+    </a>
+    <meta property="position" content="5">
+</li>
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="..">Home</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../quickstart/">Quick Start</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        <span class="terminal-mkdocs-side-nav-item--active">Concepts</span>
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        
+            
+            
+            <span class="
+        
+    terminal-mkdocs-side-nav-item terminal-mkdocs-side-nav-section-no-index">Library API</span>
+        
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/">Overview</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/loading/">Loading & Catalog</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/pages/">Pages & Words</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/chunks/">Chunks (phrase selection)</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/rivers/">Rivers (pathfinding)</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/geometry/">Geometry</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/noise/">Noise & Random</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        
+            
+            
+            <span class="
+        
+    terminal-mkdocs-side-nav-item terminal-mkdocs-side-nav-section-no-index">Data & Packages</span>
+        
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../data/format/">Data Format</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../data/packages/">npm Packages</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../pipeline/">The Pipeline</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../provenance/">Provenance & License</a>
+        
+    
+    
+    
+       </li>
+        
+    </ul>
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#concepts">Concepts</a></li>
+        <li><a href="#coordinate-system">Coordinate system</a></li><li><a href="#pages">Pages</a></li><li><a href="#words-and-lines">Words and lines</a></li><li><a href="#chunks">Chunks</a></li><li><a href="#whitespace-geometry">Whitespace geometry</a></li><li><a href="#rivers">Rivers</a></li><li><a href="#balloons-and-ribbons">Balloons and ribbons</a></li><li><a href="#chapters">Chapters</a></li>
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h1 id="concepts">Concepts<a class="headerlink" href="#concepts" title="Permanent link">#</a></h1>
+<p>The vocabulary <code>humument-lib</code> uses, and how the pieces fit together. Every term
+here maps to a concrete type in <a href="https://github.com/yz3440/humument/blob/main/humument-lib/src/types.ts"><code>src/types.ts</code></a>
+and a section of the <a href="../api/">Library API</a>.</p>
+<h2 id="coordinate-system">Coordinate system<a class="headerlink" href="#coordinate-system" title="Permanent link">#</a></h2>
+<p>All coordinates are <strong>pixel coordinates on the normalized page image</strong>, which is
+<strong>1400 × 2100</strong> grayscale (see <a href="../data/packages/">humument-images</a>). The origin
+is the <strong>top-left</strong>, with the <strong>y-axis pointing down</strong> — the same convention as
+an HTML <code>&lt;canvas&gt;</code>. A bounding box is
+<code>{ x0, y0, x1, y1 }</code> (<code>Bbox</code>), and a point is <code>{ x, y }</code> (<code>Pt</code>).</p>
+<p>Because the word boxes are in this image's pixel space, drawing over the page is
+1:1: size your canvas to <code>H.page.width × H.page.height</code>, draw the page scan at
+<code>(0, 0)</code>, and every word/gutter/river coordinate lands in the right place.</p>
+<h2 id="pages">Pages<a class="headerlink" href="#pages" title="Permanent link">#</a></h2>
+<p>A page is one printed leaf of the 1892 edition, numbered <strong>1–367</strong> — the same
+number Tom Phillips used, because this edition maps page-for-page onto
+<em>A Humument</em>. <code>Humument.load({ page })</code> returns everything for one page:
+<code>H.page</code> (dimensions, the type-block <code>body</code> bbox, the OCR-<code>valid</code> region, and the
+image URL) plus the words and whitespace geometry below.</p>
+<h2 id="words-and-lines">Words and lines<a class="headerlink" href="#words-and-lines" title="Permanent link">#</a></h2>
+<p>A <strong>word</strong> (<code>Word</code>) is one OCR'd token: its <code>text</code>, its pixel box
+(<code>x0,y0,x1,y1</code>), a 0-based <code>lineIdx</code> within the page, OCR <code>conf</code>idence, split-off
+<code>prefix</code>/<code>suffix</code> punctuation, and NLP annotations — <code>pos</code> (spaCy UPOS tag),
+<code>lemma</code>, <code>freq</code> (modern-corpus frequency), <code>rarity</code> (normalized log-inverse
+frequency, higher = rarer), and the <code>isContent</code> / <code>isConnective</code> flags.</p>
+<p><code>H.words</code> is the page's words sorted by <code>(lineIdx, x0)</code>; <code>H.lines</code> is the same
+words grouped into lines. These annotations are what the chunker scores on.</p>
+<h2 id="chunks">Chunks<a class="headerlink" href="#chunks" title="Permanent link">#</a></h2>
+<p>A <strong>chunk</strong> is a short, reading-order-adjacent phrase — the candidate "kept
+words" of an erasure. The chunker (<code>H.chunks</code> / <code>H.selectChunks</code>) matches two
+shallow part-of-speech patterns greedily, longest-first:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>NP := ADP? (DET|PRON|VERB)? (ADJ|ADV|NUM)* (NOUN|PROPN)+
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>VP := ADV* (VERB|AUX) (ADJ|ADV|NUM|AUX|PART)*
+</code></pre></div>
+<p>so a chunk reads as a little noun or verb phrase ("the embracing thoughts",
+"quietly waited"). <code>selectChunks</code> then scores each phrase (favoring rarer words
+and 2–3-word phrases ending on a noun, penalizing clichés) and picks the top few,
+spread across the page by line distance so they don't clump. See
+<a href="../api/chunks/">Chunks</a>.</p>
+<h2 id="whitespace-geometry">Whitespace geometry<a class="headerlink" href="#whitespace-geometry" title="Permanent link">#</a></h2>
+<p>The pipeline precomputes the empty space <em>between</em> the type so you can route
+rivers without any image analysis at runtime. Three related structures:</p>
+<ul>
+<li><strong>Gutters</strong> (<code>H.gutters</code>) — the channels of whitespace. A <code>Gutter</code> is either a
+  horizontal inter-line gap (<code>h_line</code>) or a vertical intra-line slit
+  (<code>v_slit</code>), described by a centre-line <code>polyline</code>, its narrowest <code>minWidth</code>,
+  and a heuristic <code>riverScore</code> (how river-like it looks).</li>
+<li><strong>Docks</strong> (<code>H.docks</code>, a <code>Map&lt;wordId, Dock&gt;</code>) — for each word, how much empty
+  space it has in each direction (<code>breathing*</code>), which direction has the most
+  slack, and the <strong>ports</strong> (compass-tagged entry/exit points) into the
+  surrounding gutters.</li>
+<li><strong>Navigation graph</strong> (<code>H.graph</code>) — a graph whose nodes are gutter/port
+  positions and whose edges are the traversable whitespace, weighted by
+  distance. This is what the Dijkstra river pathfinder walks.</li>
+</ul>
+<p>See <a href="../api/pages/">Pages &amp; Words</a> for the exact shapes.</p>
+<h2 id="rivers">Rivers<a class="headerlink" href="#rivers" title="Permanent link">#</a></h2>
+<p>A <strong>river</strong> is a path of whitespace connecting two kept words — the hand-drawn
+line Phillips runs between the words he keeps. <code>humument-lib</code> finds them two
+ways (<a href="../api/rivers/">Rivers</a>):</p>
+<ul>
+<li><strong><code>H.river.between(a, b)</code></strong> — Dijkstra over the whitespace graph. Constrained
+  to real gutters, cheap, and returns a <code>ChannelSegment</code> (an ordered polyline
+  plus the gutter id used for each span, so a renderer can vary stroke width).</li>
+<li><strong><code>H.river.flow(a, b, opts)</code></strong> — a greedy walk through a Perlin noise field,
+  biased toward the target and away from obstacle words. Organic, and a good
+  fallback when the graph can't connect two words (island gutters).</li>
+</ul>
+<h2 id="balloons-and-ribbons">Balloons and ribbons<a class="headerlink" href="#balloons-and-ribbons" title="Permanent link">#</a></h2>
+<p>The geometry helpers turn bounding boxes and river paths into point arrays you
+can render with any 2D API:</p>
+<ul>
+<li>A <strong>balloon</strong> (<code>H.geom.balloon</code>) is a wobbly closed loop around a word or
+  phrase's bounding box — the outline you'd ink around a kept fragment.</li>
+<li>A <strong>channel / ribbon</strong> (<code>H.geom.channel</code>) turns a river <code>ChannelSegment</code> into a
+  thick wavy band that meanders within its gutter.</li>
+</ul>
+<p>Both are driven by cheap <strong>seedable value-noise</strong> (<code>H.noise</code>, <code>H.random</code>), so a
+given seed always redraws the same hand-drawn wobble. See
+<a href="../api/geometry/">Geometry</a> and <a href="../api/noise/">Noise &amp; Random</a>.</p>
+<h2 id="chapters">Chapters<a class="headerlink" href="#chapters" title="Permanent link">#</a></h2>
+<p>A <strong>chapter</strong> (<code>ChapterRef</code>) is a page whose top line reads "CHAPTER &lt;Roman&gt;".
+<code>Humument.catalog.listChapters()</code> returns them as <code>{ pageNum, label, roman }</code>,
+the chapter taken to start on that page and run until the next.</p>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>

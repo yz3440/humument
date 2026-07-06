@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.1, mkdocs-terminal-4.8.0">
+    
+    <meta name="description" content="Phillips-style erasure-poetry primitives and canonical OCR data over W. H. Mallock's A Human Document (1892)"> 
+    
+    <meta name="author" content="Yufeng Zhao"> 
+    
+    <link rel="canonical" href="https://yz3440.github.io/humument/api/loading/"><link rel="icon" type="image/png" sizes="192x192" href="../../img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="../../img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="../../img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon-32x32.png" />
+
+
+    
+ 
+<title>Loading & Catalog - humument</title>
+
+
+<link href="../../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../../css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../../css/normalize.css" rel="stylesheet">
+<link href="../../css/terminal.css" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet">
+<link href="../../css/theme.tile_grid.css" rel="stylesheet">
+<link href="../../css/theme.footer.css" rel="stylesheet">
+<!-- default color palette -->
+<link href="../../css/palettes/default.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+
+
+     
+    
+    
+
+    
+    <!-- search css support -->
+<link href="../../css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = "../..",
+    shortcuts = "{}";
+</script>
+<script src="../../js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="../../js/bootstrap/bootstrap.min.js" defer></script>
+<script src="../../js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="../../search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="https://yz3440.github.io/humument/" class="no-style">humument</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../.." class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../quickstart/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Quick Start</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../concepts/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Concepts</span>
+                    </a>
+                    <meta property="position" content="2">
+                </li>
+                
+                
+                
+                
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../pipeline/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">The Pipeline</span>
+                    </a>
+                    <meta property="position" content="3">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../provenance/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Provenance & License</span>
+                    </a>
+                    <meta property="position" content="4">
+                </li>
+                
+                    
+                    
+
+
+<li property="itemListElement" typeof="ListItem">
+    <a href="#" class="menu-item" data-toggle="modal" data-target="#mkdocs_search_modal" property="item" typeof="SearchAction">
+        <i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+    </a>
+    <meta property="position" content="5">
+</li>
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../..">Home</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../quickstart/">Quick Start</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../concepts/">Concepts</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        <span class="
+        
+    terminal-mkdocs-side-nav-item--active terminal-mkdocs-side-nav-section-no-index">Library API</span>
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../">Overview</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        <span class="terminal-mkdocs-side-nav-item--active">Loading & Catalog</span>
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../pages/">Pages & Words</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../chunks/">Chunks (phrase selection)</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../rivers/">Rivers (pathfinding)</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../geometry/">Geometry</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../noise/">Noise & Random</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        
+            
+            
+            <span class="
+        
+    terminal-mkdocs-side-nav-item terminal-mkdocs-side-nav-section-no-index">Data & Packages</span>
+        
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../data/format/">Data Format</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../data/packages/">npm Packages</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../pipeline/">The Pipeline</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../provenance/">Provenance & License</a>
+        
+    
+    
+    
+       </li>
+        
+    </ul>
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#loading-catalog">Loading &amp; Catalog</a></li>
+        <li><a href="#humumentloadopts">Humument.load(opts)</a></li><li><a href="#humumentinitopts">Humument.init(opts)</a></li><li><a href="#cdn-defaults">CDN defaults</a></li><li><a href="#overriding-the-data-source">Overriding the data source</a></li><li><a href="#catalog-helpers">Catalog helpers</a></li>
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h1 id="loading-catalog">Loading &amp; Catalog<a class="headerlink" href="#loading-catalog" title="Permanent link">#</a></h1>
+<p>The <code>Humument</code> object is the entry point: it configures where data comes from,
+loads a page, and exposes catalog helpers you can call before loading anything.</p>
+<h2 id="humumentloadopts"><code>Humument.load(opts)</code><a class="headerlink" href="#humumentloadopts" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">Humument</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">opts</span><span class="o">:</span><span class="w"> </span><span class="kt">HumumentLoadOptions</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">HumumentInstance</span><span class="o">&gt;</span>
+</code></pre></div>
+<p>Fetches one page's data and returns an <a href="../#the-h-instance"><code>H</code> instance</a>.
+Calls <code>init</code> internally, so you don't have to.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">H</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Humument</span><span class="p">.</span><span class="nx">load</span><span class="p">({</span><span class="w"> </span><span class="nx">page</span><span class="o">:</span><span class="w"> </span><span class="mf">33</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+<p><code>HumumentLoadOptions</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>page</code></td>
+<td><code>number</code></td>
+<td>—</td>
+<td>Printed page number, 1–367. Required.</td>
+</tr>
+<tr>
+<td><code>dataBase</code></td>
+<td><code>string?</code></td>
+<td>npm/jsDelivr</td>
+<td>Base URL holding <code>catalog.json</code> + <code>pages/pNNNN.json(.gz)</code>.</td>
+</tr>
+<tr>
+<td><code>imageBase</code></td>
+<td><code>string?</code></td>
+<td>npm/jsDelivr</td>
+<td>Base URL for page JPEGs (<code>${imageBase}/pNNNN.jpg</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>The library never loads the page scan itself — take <code>H.page.imageUrl</code> and load
+it with your renderer (see <a href="../../quickstart/">Quick Start</a>).</p>
+<h2 id="humumentinitopts"><code>Humument.init(opts)</code><a class="headerlink" href="#humumentinitopts" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nx">Humument</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">opts?</span><span class="o">:</span><span class="w"> </span><span class="kt">InitOptions</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="ow">void</span><span class="o">&gt;</span><span class="w">   </span><span class="c1">// InitOptions = { dataBase?, imageBase? }</span>
+</code></pre></div>
+<p>Sets the base URLs and <strong>warms the catalog</strong> so <code>catalog.*</code> is ready. It's
+idempotent, resets the per-page cache, and <code>load</code> calls it for you — call it
+directly only when you want catalog data (a page list, chapters, search) <em>before</em>
+loading a page:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">await</span><span class="w"> </span><span class="nx">Humument</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span><span class="w">                       </span><span class="c1">// defaults → jsDelivr</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">pages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Humument</span><span class="p">.</span><span class="nx">catalog</span><span class="p">.</span><span class="nx">listPages</span><span class="p">();</span>
+</code></pre></div>
+<h2 id="cdn-defaults">CDN defaults<a class="headerlink" href="#cdn-defaults" title="Permanent link">#</a></h2>
+<p>With no <code>dataBase</code>/<code>imageBase</code>, the loader points at the npm-published data via
+jsDelivr — the <code>@0.1</code> tag floats on the newest <code>0.1.x</code> data release, so data
+fixes reach sketches without a library update:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">CDN_DATA_BASE</span><span class="p">,</span><span class="w"> </span><span class="nx">CDN_IMAGE_BASE</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;humument-lib&#39;</span><span class="p">;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1">// &#39;https://cdn.jsdelivr.net/npm/humument-data@0.1/db&#39;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1">// &#39;https://cdn.jsdelivr.net/npm/humument-images@0.1/pages&#39;</span>
+</code></pre></div>
+<h2 id="overriding-the-data-source">Overriding the data source<a class="headerlink" href="#overriding-the-data-source" title="Permanent link">#</a></h2>
+<p>Pass <code>dataBase</code> / <code>imageBase</code> to <code>load</code> or <code>init</code> to serve the data from
+somewhere else — a CORS-enabled host of your own, or a self-hosted export:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// A CORS-enabled copy you host:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nx">Humument</span><span class="p">.</span><span class="nx">load</span><span class="p">({</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nx">page</span><span class="o">:</span><span class="w"> </span><span class="mf">33</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nx">dataBase</span><span class="o">:</span><span class="w">  </span><span class="s1">&#39;https://your-host.example/db&#39;</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nx">imageBase</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://your-host.example/pages_normalized&#39;</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">});</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="c1">// A self-hosted export served next to your page:</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="nx">Humument</span><span class="p">.</span><span class="nx">load</span><span class="p">({</span><span class="w"> </span><span class="nx">page</span><span class="o">:</span><span class="w"> </span><span class="mf">33</span><span class="p">,</span><span class="w"> </span><span class="nx">dataBase</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;/db&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">imageBase</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;/pages_normalized&#39;</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+<p>Any origin that serves the <a href="../../data/format/">Data Format</a> works. Trailing
+slashes are trimmed for you.</p>
+<h2 id="catalog-helpers">Catalog helpers<a class="headerlink" href="#catalog-helpers" title="Permanent link">#</a></h2>
+<p><code>Humument.catalog.*</code> reads the catalog and search index. All are async except
+<code>pageImageUrl</code>. They work after <code>init</code> (or after any <code>load</code>).</p>
+<h3 id="listpages"><code>listPages()</code><a class="headerlink" href="#listpages" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nx">listPages</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="kt">number</span><span class="p">[]</span><span class="o">&gt;</span>
+</code></pre></div>
+<p>Content page numbers, ascending (the export ships only content pages).</p>
+<h3 id="listallpagerefs"><code>listAllPageRefs()</code><a class="headerlink" href="#listallpagerefs" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nx">listAllPageRefs</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">PageRef</span><span class="p">[]</span><span class="o">&gt;</span><span class="w">   </span><span class="c1">// PageRef = { pageNum }</span>
+</code></pre></div>
+<p>The same pages as <code>{ pageNum }</code> objects, handy for catalog UIs.</p>
+<h3 id="listchapters"><code>listChapters()</code><a class="headerlink" href="#listchapters" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">listChapters</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">ChapterRef</span><span class="p">[]</span><span class="o">&gt;</span><span class="w">   </span><span class="c1">// ChapterRef = { pageNum, label, roman }</span>
+</code></pre></div>
+<p>Chapter-opening pages detected from the OCR (a top line reading
+"CHAPTER &lt;Roman&gt;"), e.g. <code>{ pageNum: 12, label: 'CHAPTER III', roman: 'III' }</code>.</p>
+<h3 id="searchpagesquery-opts"><code>searchPages(query, opts?)</code><a class="headerlink" href="#searchpagesquery-opts" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nx">searchPages</span><span class="p">(</span><span class="nx">query</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">opts</span><span class="o">?:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">limit?</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">PageMatch</span><span class="p">[]</span><span class="o">&gt;</span>
+</code></pre></div>
+<p>Substring search over the OCR tokens. Ranks pages by total hit count and returns
+<code>PageMatch = { pageNum, hits, snippet }</code>, where <code>snippet</code> is a short window
+around the first hit on the page. <code>opts.limit</code> defaults to <code>50</code>. The search index
+is lazy-loaded on first call.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">hits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">Humument</span><span class="p">.</span><span class="nx">catalog</span><span class="p">.</span><span class="nx">searchPages</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">limit</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+<h3 id="getwordspage"><code>getWords(page)</code><a class="headerlink" href="#getwordspage" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nx">getWords</span><span class="p">(</span><span class="nx">pageNum</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">Word</span><span class="p">[]</span><span class="o">&gt;</span>
+</code></pre></div>
+<p>Just the words for a page (the same array you'd get as <code>H.words</code>), without
+building a full instance — useful for word-overlay previews.</p>
+<h3 id="pageimageurlpage"><code>pageImageUrl(page)</code><a class="headerlink" href="#pageimageurlpage" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nx">pageImageUrl</span><span class="p">(</span><span class="nx">pageNum</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span>
+</code></pre></div>
+<p>Synchronous. Builds <code>${imageBase}/pNNNN.jpg</code> from the configured image base
+(so call <code>init</code>/<code>load</code> first). This is the same value as <code>H.page.imageUrl</code>.</p>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>

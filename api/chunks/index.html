@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.1, mkdocs-terminal-4.8.0">
+    
+    <meta name="description" content="Phillips-style erasure-poetry primitives and canonical OCR data over W. H. Mallock's A Human Document (1892)"> 
+    
+    <meta name="author" content="Yufeng Zhao"> 
+    
+    <link rel="canonical" href="https://yz3440.github.io/humument/api/chunks/"><link rel="icon" type="image/png" sizes="192x192" href="../../img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="../../img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="../../img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon-32x32.png" />
+
+
+    
+ 
+<title>Chunks (phrase selection) - humument</title>
+
+
+<link href="../../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../../css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../../css/normalize.css" rel="stylesheet">
+<link href="../../css/terminal.css" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet">
+<link href="../../css/theme.tile_grid.css" rel="stylesheet">
+<link href="../../css/theme.footer.css" rel="stylesheet">
+<!-- default color palette -->
+<link href="../../css/palettes/default.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+
+
+     
+    
+    
+
+    
+    <!-- search css support -->
+<link href="../../css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = "../..",
+    shortcuts = "{}";
+</script>
+<script src="../../js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="../../js/bootstrap/bootstrap.min.js" defer></script>
+<script src="../../js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="../../search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="https://yz3440.github.io/humument/" class="no-style">humument</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../.." class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../quickstart/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Quick Start</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../concepts/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Concepts</span>
+                    </a>
+                    <meta property="position" content="2">
+                </li>
+                
+                
+                
+                
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../pipeline/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">The Pipeline</span>
+                    </a>
+                    <meta property="position" content="3">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../provenance/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Provenance & License</span>
+                    </a>
+                    <meta property="position" content="4">
+                </li>
+                
+                    
+                    
+
+
+<li property="itemListElement" typeof="ListItem">
+    <a href="#" class="menu-item" data-toggle="modal" data-target="#mkdocs_search_modal" property="item" typeof="SearchAction">
+        <i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+    </a>
+    <meta property="position" content="5">
+</li>
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../..">Home</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../quickstart/">Quick Start</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../concepts/">Concepts</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        <span class="
+        
+    terminal-mkdocs-side-nav-item--active terminal-mkdocs-side-nav-section-no-index">Library API</span>
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../">Overview</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../loading/">Loading & Catalog</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../pages/">Pages & Words</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        <span class="terminal-mkdocs-side-nav-item--active">Chunks (phrase selection)</span>
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../rivers/">Rivers (pathfinding)</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../geometry/">Geometry</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../noise/">Noise & Random</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        
+            
+            
+            <span class="
+        
+    terminal-mkdocs-side-nav-item terminal-mkdocs-side-nav-section-no-index">Data & Packages</span>
+        
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../data/format/">Data Format</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../data/packages/">npm Packages</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../pipeline/">The Pipeline</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../provenance/">Provenance & License</a>
+        
+    
+    
+    
+       </li>
+        
+    </ul>
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#chunks-phrase-selection">Chunks (phrase selection)</a></li>
+        <li><a href="#hchunksopts">H.chunks(opts?)</a></li><li><a href="#hselectchunksopts">H.selectChunks(opts?)</a></li><li><a href="#hchunkscorechunk">H.chunkScore(chunk)</a></li><li><a href="#hpassescandidacyword-headerlines">H.passesCandidacy(word, headerLines?)</a></li><li><a href="#pos-helpers">POS helpers</a></li>
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h1 id="chunks-phrase-selection">Chunks (phrase selection)<a class="headerlink" href="#chunks-phrase-selection" title="Permanent link">#</a></h1>
+<p>The chunker finds short, reading-order phrases on a page — the candidate "kept
+words" of an erasure — and selects a spread of the strongest ones. See
+<a href="../../concepts/#chunks">Concepts → Chunks</a> for the idea.</p>
+<h2 id="hchunksopts"><code>H.chunks(opts?)</code><a class="headerlink" href="#hchunksopts" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">H</span><span class="p">.</span><span class="nx">chunks</span><span class="p">(</span><span class="nx">opts?</span><span class="o">:</span><span class="w"> </span><span class="kt">ChunksOptions</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nx">Word</span><span class="p">[][]</span>
+</code></pre></div>
+<p>All matching chunks on the page. Each chunk is a <code>Word[]</code> in reading order.</p>
+<p>Two shallow POS patterns are matched greedily, longest-first, over
+adjacency runs (words within one line of each other, <code>|Δ lineIdx| ≤ 1</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>NP := ADP? (DET|PRON|VERB)? (ADJ|ADV|NUM)* (NOUN|PROPN)+
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>VP := ADV* (VERB|AUX) (ADJ|ADV|NUM|AUX|PART)*
+</code></pre></div>
+<p>A leading <code>VERB</code> inside <code>NP</code> captures gerund/participial modifiers
+("embracing thoughts").</p>
+<p><code>ChunksOptions</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>maxLen</code></td>
+<td><code>number?</code></td>
+<td><code>4</code></td>
+<td>Maximum words per chunk.</td>
+</tr>
+<tr>
+<td><code>candidates</code></td>
+<td><code>Word[]?</code></td>
+<td><code>passesCandidacy</code> filter</td>
+<td>Pre-filtered candidate words.</td>
+</tr>
+</tbody>
+</table>
+<p>By default the candidate list is every word that passes
+<a href="#hpassescandidacyword-headerlines"><code>passesCandidacy</code></a> (header lines and the
+running page number are excluded automatically).</p>
+<h2 id="hselectchunksopts"><code>H.selectChunks(opts?)</code><a class="headerlink" href="#hselectchunksopts" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nx">H</span><span class="p">.</span><span class="nx">selectChunks</span><span class="p">(</span><span class="nx">opts?</span><span class="o">:</span><span class="w"> </span><span class="kt">SelectChunksOptions</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nx">Word</span><span class="p">[][]</span>
+</code></pre></div>
+<p>Scores every chunk with <a href="#hchunkscorechunk"><code>chunkScore</code></a> and picks the best
+few, <strong>spread across the page</strong> so they don't clump on adjacent lines. The
+result is sorted by <code>(lineIdx, x0)</code>.</p>
+<p><code>SelectChunksOptions</code> extends <code>ChunksOptions</code> and adds:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nSeeds</code></td>
+<td><code>number?</code></td>
+<td><code>3</code></td>
+<td>How many chunks to pick.</td>
+</tr>
+<tr>
+<td><code>minLineDist</code></td>
+<td><code>number?</code></td>
+<td><code>2</code></td>
+<td>Minimum line distance between picks.</td>
+</tr>
+<tr>
+<td><code>seed</code></td>
+<td><code>number?</code></td>
+<td><code>42</code></td>
+<td>PRNG seed for the shuffle.</td>
+</tr>
+<tr>
+<td><code>variation</code></td>
+<td><code>number?</code></td>
+<td><code>0</code></td>
+<td><code>0</code> = pure top-N, <code>1</code> = light shuffle, <code>2</code> = wider shuffle.</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">phrases</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">H</span><span class="p">.</span><span class="nx">selectChunks</span><span class="p">({</span><span class="w"> </span><span class="nx">nSeeds</span><span class="o">:</span><span class="w"> </span><span class="mf">4</span><span class="p">,</span><span class="w"> </span><span class="nx">minLineDist</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span><span class="w"> </span><span class="nx">seed</span><span class="o">:</span><span class="w"> </span><span class="mf">42</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1">// each phrase is a Word[]; turn it into a balloon outline to render:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">outlines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">phrases</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">ph</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">H</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">balloon</span><span class="p">(</span><span class="nx">H</span><span class="p">.</span><span class="nx">bboxOf</span><span class="p">(</span><span class="nx">ph</span><span class="p">),</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">wobble</span><span class="o">:</span><span class="w"> </span><span class="mf">0.15</span><span class="w"> </span><span class="p">}));</span>
+</code></pre></div>
+<p>With <code>variation: 0</code> (the default) you get the deterministic top-N. Raising it
+shuffles among the strongest candidates using <code>seed</code>, so different seeds yield
+different — but still strong — selections.</p>
+<h2 id="hchunkscorechunk"><code>H.chunkScore(chunk)</code><a class="headerlink" href="#hchunkscorechunk" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nx">H</span><span class="p">.</span><span class="nx">chunkScore</span><span class="p">(</span><span class="nx">chunk</span><span class="o">:</span><span class="w"> </span><span class="kt">Word</span><span class="p">[])</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span>
+</code></pre></div>
+<p>The heuristic <code>selectChunks</code> ranks by. Higher is better:</p>
+<ul>
+<li><strong>+ <code>rarity</code></strong> of each word (rarer words score higher);</li>
+<li><strong>+0.4</strong> per content word; a chunk with <strong>no</strong> content word scores <strong>−999</strong>
+  (effectively disqualified);</li>
+<li><strong>−0.4</strong> for each banned cliché (<code>heart</code>, <code>soul</code>, <code>love</code>, <code>dream</code>, <code>hope</code>,
+  <code>darkness</code>, <code>light</code>, <code>shadow</code>);</li>
+<li>a <strong>length bonus</strong>: 2 words <code>+0.7</code>, 3 words <code>+0.6</code>, 4 words <code>+0.2</code>, 1 word
+  <code>+0</code>, longer <code>−0.4</code>;</li>
+<li><strong>+0.4</strong> if the last word is a <code>NOUN</code> or <code>PROPN</code>.</li>
+</ul>
+<h2 id="hpassescandidacyword-headerlines"><code>H.passesCandidacy(word, headerLines?)</code><a class="headerlink" href="#hpassescandidacyword-headerlines" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nx">H</span><span class="p">.</span><span class="nx">passesCandidacy</span><span class="p">(</span><span class="nx">word</span><span class="o">:</span><span class="w"> </span><span class="kt">Word</span><span class="p">,</span><span class="w"> </span><span class="nx">headerLines?</span><span class="o">:</span><span class="w"> </span><span class="kt">Set</span><span class="o">&lt;</span><span class="kt">number</span><span class="o">&gt;</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span>
+</code></pre></div>
+<p>Whether a word is eligible to appear in a chunk. Rejects: a small plot-name
+blocklist, words with <code>conf &lt; 0.7</code>, single characters other than <code>I</code>/<code>a</code>/<code>O</code>,
+the page number / header digits (numbers on line ≤ 1), and words on detected
+header lines. <code>headerLines</code> defaults to an empty set; <code>H.chunks</code> computes and
+passes the real header lines for you.</p>
+<h2 id="pos-helpers">POS helpers<a class="headerlink" href="#pos-helpers" title="Permanent link">#</a></h2>
+<p>The UPOS tag constants and two convenience predicates (over a word's <code>pos</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nx">H</span><span class="p">.</span><span class="nx">POS</span><span class="w">   </span><span class="c1">// { NOUN:&#39;NOUN&#39;, VERB:&#39;VERB&#39;, ADJ:&#39;ADJ&#39;, ADV:&#39;ADV&#39;, ADP:&#39;ADP&#39;, DET:&#39;DET&#39;,</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">        </span><span class="c1">//   PRON:&#39;PRON&#39;, NUM:&#39;NUM&#39;, PROPN:&#39;PROPN&#39;, AUX:&#39;AUX&#39;, PART:&#39;PART&#39;,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">        </span><span class="c1">//   CCONJ:&#39;CCONJ&#39;, SCONJ:&#39;SCONJ&#39; }</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nx">H</span><span class="p">.</span><span class="nx">HEAD</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span><span class="w">  </span><span class="c1">// true if w.pos is NOUN or PROPN   (a phrase head)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nx">H</span><span class="p">.</span><span class="nx">MOD</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span><span class="w">   </span><span class="c1">// true if w.pos is ADJ, ADV, or NUM (a modifier)</span>
+</code></pre></div>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>
