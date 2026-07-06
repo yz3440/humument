@@ -1,0 +1,61 @@
+site_name: humument
+site_description: Phillips-style erasure-poetry primitives and canonical OCR data over W. H. Mallock's A Human Document (1892)
+site_author: Yufeng Zhao
+site_url: https://yz3440.github.io/humument/
+
+repo_name: yz3440/humument
+repo_url: https://github.com/yz3440/humument
+
+theme:
+  name: terminal
+
+# Fail the build (under --strict) on broken internal links or anchors, and on
+# any doc left out of the nav. External links are not checked.
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+  links:
+    not_found: warn
+    anchors: warn
+    unrecognized_links: warn
+
+plugins:
+  - search
+
+markdown_extensions:
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - meta
+  - tables
+  - toc:
+      permalink: "#"
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ["."]
+  - pymdownx.superfences
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+
+nav:
+  - Home: index.md
+  - Quick Start: quickstart.md
+  - Concepts: concepts.md
+  - Library API:
+      - Overview: api/index.md
+      - Loading & Catalog: api/loading.md
+      - Pages & Words: api/pages.md
+      - Chunks (phrase selection): api/chunks.md
+      - Rivers (pathfinding): api/rivers.md
+      - Geometry: api/geometry.md
+      - Noise & Random: api/noise.md
+  - Data & Packages:
+      - Data Format: data/format.md
+      - npm Packages: data/packages.md
+  - The Pipeline: pipeline.md
+  - Provenance & License: provenance.md

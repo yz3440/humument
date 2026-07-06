@@ -17,6 +17,8 @@ This repository is two things:
 
 All OCR is local (macOS Vision); no cloud APIs are used.
 
+📖 **Documentation:** <https://yz3440.github.io/humument/>
+
 ## The three npm packages
 
 | Package | What it is | Size (unpacked) |
@@ -97,6 +99,20 @@ than regenerated.
 `data-packages/sync.mjs` copies the pipeline outputs into the two data packages
 at publish time (`output/db` → `humument-data`; `data/pages_normalized` →
 `humument-images`).
+
+## Building the docs
+
+The documentation site (MkDocs, deployed to GitHub Pages) is built with `uv`:
+
+```sh
+uv sync --group docs      # or: uv pip install --group docs
+uv run mkdocs serve       # live preview at http://127.0.0.1:8000
+uv run mkdocs build       # one-off build → ./site (git-ignored)
+```
+
+Pages live in [`docs/`](docs); the nav and theme are configured in
+[`mkdocs.yml`](mkdocs.yml). A push to `main` auto-deploys via
+[`.github/workflows/docs.yml`](.github/workflows/docs.yml).
 
 ## Provenance
 
