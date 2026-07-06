@@ -50,7 +50,7 @@ jsDelivr — the `@0.1` tag floats on the newest `0.1.x` data release, so data
 fixes reach sketches without a library update:
 
 ```js
-import { CDN_DATA_BASE, CDN_IMAGE_BASE } from 'humument-lib';
+import { CDN_DATA_BASE, CDN_IMAGE_BASE } from 'humument';
 // 'https://cdn.jsdelivr.net/npm/humument-data@0.1/db'
 // 'https://cdn.jsdelivr.net/npm/humument-images@0.1/pages'
 ```

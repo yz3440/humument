@@ -1,4 +1,4 @@
-"""Stage 03 — export the DB to static JSON consumed by humument-lib.
+"""Stage 03 — export the DB to static JSON consumed by humument.
 
 Consumers are fully static (no sql.js): they fetch one small JSON per page on
 demand, plus a catalog and a search index. This reads the volume-less DB and
@@ -8,7 +8,7 @@ writes, under output/db/ (published as the humument-data npm package):
     pages/pNNNN.json      {meta, words[], gutters[], docks[], graph[]}
     search-index.json     {token: [[pageNum, count], …]}  (lowercased tokens)
 
-JSON shapes match the humument-lib types exactly (camelCase, parsed arrays), so
+JSON shapes match the humument types exactly (camelCase, parsed arrays), so
 the runtime just JSON.parses. Run:  uv run python pipeline/03_export_web.py
 """
 
@@ -111,7 +111,7 @@ def export_pages(db):
 
 def export_catalog(db, content):
     # chapters: lines (line_idx<=3) reading "CHAPTER <Roman>" — replicate
-    # humument-lib listChapters, building line text in Python (sqlite 3.43 has
+    # humument listChapters, building line text in Python (sqlite 3.43 has
     # no ORDER BY in GROUP_CONCAT).
     lines = defaultdict(list)
     for pn, li, text, x0 in db.execute(

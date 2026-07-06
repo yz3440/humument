@@ -5,11 +5,11 @@ other two are the data it fetches from a CDN.
 
 | Package | Version | What it is | Size (unpacked) |
 | --- | --- | --- | --- |
-| [`humument-lib`](https://www.npmjs.com/package/humument-lib) | `0.2.0` | The TypeScript library — renderer-agnostic erasure-poetry primitives. | ~230 KB |
+| [`humument`](https://www.npmjs.com/package/humument) | `0.1.0` | The TypeScript library — renderer-agnostic erasure-poetry primitives. | ~230 KB |
 | [`humument-data`](https://www.npmjs.com/package/humument-data) | `0.1.0` | Per-page OCR JSON (words, bboxes, gutters, navigation graph), gzipped. | ~27 MB |
 | [`humument-images`](https://www.npmjs.com/package/humument-images) | `0.1.0` | 367 normalized B&W page JPEGs (1400 × 2100). | ~126 MB |
 
-## `humument-lib`
+## `humument`
 
 The only package you install. Zero runtime dependencies. Ships ESM
 (`dist/index.js`) plus an IIFE bundle (`dist/index.global.js`) that exposes a
@@ -17,13 +17,13 @@ The only package you install. Zero runtime dependencies. Ships ESM
 [Quick Start](../quickstart.md) and the [Library API](../api/index.md).
 
 ```sh
-npm install humument-lib
+npm install humument
 ```
 
 ## `humument-data`
 
 The data layer: `catalog.json`, `search-index.json`, and one gzipped JSON per
-printed page under `db/pages/pNNNN.json.gz`. `humument-lib` fetches it by default
+printed page under `db/pages/pNNNN.json.gz`. `humument` fetches it by default
 from jsDelivr; you rarely reference it directly. Its exact shapes are the
 [Data Format](format.md).
 
@@ -50,16 +50,16 @@ Two reasons, both about the CDN:
   ~126 MB and the raw page JSON is ~159 MB — together they'd blow the ceiling.
   Splitting them keeps each package comfortably under it.
 - **The page JSON ships gzipped** (`.json.gz` only), which brings the ~159 MB raw
-  set down to ~26 MB. `humument-lib` decodes it with `DecompressionStream` and
+  set down to ~26 MB. `humument` decodes it with `DecompressionStream` and
   falls back to plain `.json` for self-hosted exports (see
   [Data Format → Gzip twin](format.md#gzip-twin)).
 
-Because both are on jsDelivr and `humument-lib` points at them by default,
+Because both are on jsDelivr and `humument` points at them by default,
 `Humument.load({ page })` works from any origin with nothing self-hosted.
 
 ## Versioning
 
-`humument-lib`'s CDN defaults float on the **`@0.1`** tag of the data/images
+`humument`'s CDN defaults float on the **`@0.1`** tag of the data/images
 packages (`CDN_DATA_BASE` / `CDN_IMAGE_BASE`), so a data fix reaches sketches
 without a library release. Pin a different origin or version by passing
 `dataBase` / `imageBase` to [`Humument.load`](../api/loading.md#overriding-the-data-source).

@@ -20,6 +20,9 @@ validation:
     anchors: warn
     unrecognized_links: warn
 
+extra_css:
+  - assets/extra.css
+
 plugins:
   - search
 

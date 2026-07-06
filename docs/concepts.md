@@ -1,6 +1,6 @@
 # Concepts
 
-The vocabulary `humument-lib` uses, and how the pieces fit together. Every term
+The vocabulary `humument` uses, and how the pieces fit together. Every term
 here maps to a concrete type in [`src/types.ts`](https://github.com/yz3440/humument/blob/main/humument-lib/src/types.ts)
 and a section of the [Library API](api/index.md).
 
@@ -74,7 +74,7 @@ See [Pages & Words](api/pages.md) for the exact shapes.
 ## Rivers
 
 A **river** is a path of whitespace connecting two kept words — the hand-drawn
-line Phillips runs between the words he keeps. `humument-lib` finds them two
+line Phillips runs between the words he keeps. `humument` finds them two
 ways ([Rivers](api/rivers.md)):
 
 - **`H.river.between(a, b)`** — Dijkstra over the whitespace graph. Constrained

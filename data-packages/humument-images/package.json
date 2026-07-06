@@ -1,7 +1,7 @@
 {
   "name": "humument-images",
   "version": "0.1.0",
-  "description": "Normalized page scans (367 B&W JPEGs) of the 1892 one-volume edition of W. H. Mallock's A Human Document — the image layer consumed by humument-lib.",
+  "description": "Normalized page scans (367 B&W JPEGs) of the 1892 one-volume edition of W. H. Mallock's A Human Document — the image layer consumed by humument.",
   "license": "MIT",
   "author": "Yufeng Zhao <yufeng-zhao@outlook.com>",
   "homepage": "https://github.com/yz3440/humument/tree/main/data-packages/humument-images",

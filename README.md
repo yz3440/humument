@@ -6,6 +6,13 @@ Tom Phillips treated to make _A Humument_. It maps page-for-page onto that
 edition, so page numbers here equal the **printed book page (= the _A Humument_
 page), 1–367**.
 
+![Six pages of A Human Document, each shown at the four CV pipeline stages — raw scan, deskewed and cropped, normalized black-and-white, and whitespace-plus-features analysis](docs/assets/pipeline-stages.jpg)
+
+_The CV pipeline across six pages — one row per stage: **1** raw scan → **2**
+deskewed & cropped → **3** normalized B&W → **4** whitespace graph + word-rarity
+features (rarest words highlighted). Read a column top-to-bottom to watch one page
+get aligned, cleaned, and analysed._
+
 This repository is two things:
 
 - a **CV/OCR pipeline** (Python, run with [`uv`](https://docs.astral.sh/uv/))
@@ -23,11 +30,11 @@ All OCR is local (macOS Vision); no cloud APIs are used.
 
 | Package | What it is | Size (unpacked) |
 | --- | --- | --- |
-| [`humument-lib`](humument-lib) | Renderer-agnostic erasure-poetry primitives (words, OCR boxes, whitespace rivers, balloon/ribbon geometry). Zero runtime deps. | ~230 KB |
+| [`humument`](humument-lib) | Renderer-agnostic erasure-poetry primitives (words, OCR boxes, whitespace rivers, balloon/ribbon geometry). Zero runtime deps. | ~230 KB |
 | [`humument-data`](data-packages/humument-data) | Per-page OCR JSON (words, bboxes, gutters, navigation graph), gzipped. | ~27 MB |
 | [`humument-images`](data-packages/humument-images) | 367 normalized B&W page JPEGs. | ~126 MB |
 
-`humument-lib`'s defaults fetch `humument-data` and `humument-images` straight
+`humument`'s defaults fetch `humument-data` and `humument-images` straight
 from the jsDelivr CDN, so `Humument.load({ page: 33 })` works from any origin
 without hosting anything. Data and images are **separate packages** — and pages
 ship **gzipped** — because jsDelivr refuses any package over **150 MB
@@ -39,7 +46,7 @@ The library is renderer-agnostic — every drawing primitive returns plain
 `{x, y}` point arrays. Here with the browser's built-in Canvas2D:
 
 ```js
-import { Humument } from 'humument-lib'; // CDN: const { Humument } = HumumentLib;
+import { Humument } from 'humument'; // CDN: const { Humument } = HumumentLib;
 
 const ctx = canvas.getContext('2d');
 const H = await Humument.load({ page: 33 });
@@ -104,6 +111,11 @@ than regenerated.
 at publish time (`output/db` → `humument-data`; `data/pages_normalized` →
 `humument-images`).
 
+![A grid of normalized page scans sampled across the 367-page book](docs/assets/dataset-grid.jpg)
+
+_The resulting dataset — 367 normalized B&W pages (a sample spread across the
+book), published as `humument-images`._
+
 ## Building the docs
 
 The documentation site (MkDocs, deployed to GitHub Pages) is built with `uv`:
@@ -122,9 +134,11 @@ Pages live in [`docs/`](docs); the nav and theme are configured in
 
 Scanned from the Internet Archive item
 [`ahumandocumenta04mallgoog`](https://archive.org/details/ahumandocumenta04mallgoog)
-(digitized by Google from a public-domain copy). The 1892 text is in the public
-domain; this code, the derived data, and the packaging are **MIT-licensed** (see
-[`LICENSE`](LICENSE)).
+(digitized by Google from a public-domain copy). The source PDF the pipeline
+rasterizes is
+[`ahumandocumenta04mallgoog.pdf`](https://archive.org/download/ahumandocumenta04mallgoog/ahumandocumenta04mallgoog.pdf).
+The 1892 text is in the public domain; this code, the derived data, and the
+packaging are **MIT-licensed** (see [`LICENSE`](LICENSE)).
 
 > The multi-volume "three-decker" first edition has different pagination and
 > does **not** line up with _A Humument_; this repo deliberately uses only the

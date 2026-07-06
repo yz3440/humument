@@ -1,6 +1,6 @@
 # Geometry
 
-`humument-lib` is **renderer-agnostic**: it turns words and river paths into plain
+`humument` is **renderer-agnostic**: it turns words and river paths into plain
 `{x, y}` point arrays and draws nothing itself. You render those arrays with
 whatever 2D API you like — the Canvas2D `<canvas>`, SVG, WebGL, or a server-side
 canvas.

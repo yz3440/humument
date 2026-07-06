@@ -1,11 +1,11 @@
 # Library API — Overview
 
-`humument-lib` exposes one object, **`Humument`**, plus a rich re-export of
+`humument` exposes one object, **`Humument`**, plus a rich re-export of
 types. You load a page and get back an **`H` instance** (`HumumentInstance`)
 whose members are the whole toolkit.
 
 ```js
-import { Humument } from 'humument-lib'; // CDN: const { Humument } = HumumentLib;
+import { Humument } from 'humument'; // CDN: const { Humument } = HumumentLib;
 
 const H = await Humument.load({ page: 33 });
 ```

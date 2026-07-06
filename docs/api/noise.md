@@ -53,7 +53,7 @@ const pick = arr[Math.floor(rnd() * arr.length)];
 
 ## Why seeded?
 
-All of `humument-lib`'s wobble/meander/shuffle is driven by these three, so
+All of `humument`'s wobble/meander/shuffle is driven by these three, so
 passing the same `seed` to [`selectChunks`](chunks.md#hselectchunksopts),
 [`balloon`](geometry.md#hgeomballoonbbox-opts), or
 [`channel`](geometry.md#hgeomchannelseg-opts) reproduces the identical result —

@@ -5,7 +5,7 @@ Run as the gate after a full pipeline run (or future PDF swap):
     uv run python pipeline/validate_db.py
     uv run python pipeline/validate_db.py --expected-pages 367
 
-Every check the editor (humument-lib + editor-frontend) relies on is asserted
+Every check the editor (humument + editor-frontend) relies on is asserted
 here. Exits non-zero if any check fails, so it doubles as a CI/pytest gate.
 
 The core invariants:

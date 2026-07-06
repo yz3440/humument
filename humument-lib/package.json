@@ -1,6 +1,6 @@
 {
-  "name": "humument-lib",
-  "version": "0.3.0",
+  "name": "humument",
+  "version": "0.1.0",
   "description": "Renderer-agnostic Phillips-style erasure-poetry primitives over W. H. Mallock's A Human Document.",
   "license": "MIT",
   "author": "Yufeng Zhao <yufeng-zhao@outlook.com>",

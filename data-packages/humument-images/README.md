@@ -3,7 +3,7 @@
 Normalized page scans of the **1892 one-volume Chapman & Hall edition** of
 W. H. Mallock's *A Human Document* — the novel Tom Phillips treated to make
 *A Humument*. This package is the image layer consumed by
-[humument-lib](https://www.npmjs.com/package/humument-lib); the word bboxes in
+[humument](https://www.npmjs.com/package/humument); the word bboxes in
 [humument-data](https://www.npmjs.com/package/humument-data) are in these
 images' pixel coordinates.
 

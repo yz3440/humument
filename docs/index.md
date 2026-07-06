@@ -12,6 +12,13 @@ programmatically, this project gives you the whole book (every page's words,
 OCR boxes, and whitespace geometry) with **zero configuration**, ready to render
 with any 2D API.
 
+![Six pages of A Human Document, each shown at the four CV pipeline stages — raw scan, deskewed and cropped, normalized black-and-white, and whitespace-plus-features analysis](assets/pipeline-stages.jpg)
+
+_The CV pipeline across six pages — one row per stage: **1** raw scan → **2**
+deskewed & cropped → **3** normalized B&W → **4** whitespace graph + word-rarity
+features (rarest words highlighted). Read a column top-to-bottom to watch one page
+get aligned, cleaned, and analysed._
+
 ## What is erasure poetry?
 
 Tom Phillips took a forgotten Victorian novel and, page by page, painted over
@@ -37,11 +44,11 @@ All OCR is local (macOS Vision); no cloud APIs are used.
 
 | Package | What it is | Size (unpacked) |
 | --- | --- | --- |
-| [`humument-lib`](api/index.md) | Renderer-agnostic erasure-poetry primitives (words, OCR boxes, whitespace rivers, balloon/ribbon geometry). Zero runtime deps. | ~230 KB |
+| [`humument`](api/index.md) | Renderer-agnostic erasure-poetry primitives (words, OCR boxes, whitespace rivers, balloon/ribbon geometry). Zero runtime deps. | ~230 KB |
 | [`humument-data`](data/packages.md) | Per-page OCR JSON (words, bboxes, gutters, navigation graph), gzipped. | ~27 MB |
 | [`humument-images`](data/packages.md) | 367 normalized B&W page JPEGs. | ~126 MB |
 
-`humument-lib`'s defaults fetch `humument-data` and `humument-images` straight
+`humument`'s defaults fetch `humument-data` and `humument-images` straight
 from the [jsDelivr](https://www.jsdelivr.com/) CDN, so `Humument.load({ page: 33 })`
 works from any origin without hosting anything. See
 [npm Packages](data/packages.md) for why data and images ship separately.

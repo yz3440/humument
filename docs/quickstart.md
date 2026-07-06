@@ -1,6 +1,6 @@
 # Quick Start
 
-`humument-lib` loads a single page of _A Human Document_ — its words, OCR boxes,
+`humument` loads a single page of _A Human Document_ — its words, OCR boxes,
 line groupings, whitespace geometry, and a navigation graph — and gives you a
 POS-pattern phrase chunker, two river pathfinders, and balloon/ribbon geometry to
 draw over it. It is **renderer-agnostic**: every drawing primitive returns plain
@@ -10,7 +10,7 @@ published on npm and fetched from a CDN, so there is **nothing to host**.
 ## Install
 
 ```sh
-npm install humument-lib
+npm install humument
 ```
 
 Zero runtime dependencies. The examples below draw with the browser's built-in
@@ -22,7 +22,7 @@ Load the IIFE bundle from a CDN — it exposes a `HumumentLib` global, so it wor
 in a plain `<script>` with no bundler:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/humument-lib@0.2/dist/index.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/humument@0.1/dist/index.global.js"></script>
 <script>
   const { Humument } = HumumentLib;
   // ... same API as the ESM import
@@ -40,7 +40,7 @@ from any origin without hosting anything.
 then read the page's data off the returned `H` instance:
 
 ```js
-import { Humument } from 'humument-lib'; // CDN: const { Humument } = HumumentLib;
+import { Humument } from 'humument'; // CDN: const { Humument } = HumumentLib;
 
 const H = await Humument.load({ page: 33 });
 
@@ -57,7 +57,7 @@ Load the page image, then stroke a balloon around each selected phrase. Every
 coordinate is already in the page image's pixel space, so it lines up 1:1.
 
 ```js
-import { Humument } from 'humument-lib';
+import { Humument } from 'humument';
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');

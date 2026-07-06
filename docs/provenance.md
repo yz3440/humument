@@ -34,7 +34,7 @@ as regenerable.
 The 1892 novel is in the **public domain**. This project's **code, the derived
 data, and the packaging are MIT-licensed** — the
 [`humument`](https://github.com/yz3440/humument) repository and all three npm
-packages ([humument-lib](data/packages.md), [humument-data](data/packages.md),
+packages ([humument](data/packages.md), [humument-data](data/packages.md),
 [humument-images](data/packages.md)).
 
 See the [`LICENSE`](https://github.com/yz3440/humument/blob/main/LICENSE) file

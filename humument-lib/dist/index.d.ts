@@ -327,14 +327,14 @@ interface FlowOptions {
 declare function obstaclesFrom(words: Word[], selectedIds: Iterable<number>, pad?: number): Bbox[];
 
 /**
- * humument-lib — public entry.
+ * humument — public entry.
  *
  * Renderer-agnostic: every drawing primitive returns plain `{x, y}` point
  * arrays, so the caller renders with any 2D API (Canvas2D, SVG, WebGL, …).
  *
  * Quick start:
  *
- *   import { Humument } from 'humument-lib';
+ *   import { Humument } from 'humument';
  *
  *   const H = await Humument.load({ page: 33 });  // data/images come from npm (jsDelivr)
  *   const phrases = H.selectChunks({ nSeeds: 4, seed: 42 });

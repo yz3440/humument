@@ -3,7 +3,7 @@
 Per-page OCR data for the **1892 one-volume Chapman & Hall edition** of
 W. H. Mallock's *A Human Document* — the novel Tom Phillips treated to make
 *A Humument*. This package is the data layer consumed by
-[humument-lib](https://www.npmjs.com/package/humument-lib); most users should
+[humument](https://www.npmjs.com/package/humument); most users should
 use that library instead of fetching these files directly.
 
 ## Layout

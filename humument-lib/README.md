@@ -1,4 +1,4 @@
-# humument-lib
+# humument
 
 Renderer-agnostic Phillips-style erasure-poetry primitives over W. H. Mallock's _A Human Document_ (1892).
 
@@ -9,7 +9,7 @@ Loads a single page's words, OCR boxes, line groupings, whitespace gutters, and 
 ## Install
 
 ```sh
-npm install humument-lib
+npm install humument
 ```
 
 Zero runtime dependencies.
@@ -19,7 +19,7 @@ Zero runtime dependencies.
 Load the IIFE bundle from a CDN — it exposes a `HumumentLib` global, so it works in a plain `<script>` with no bundler:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/humument-lib@0.3/dist/index.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/humument@0.1/dist/index.global.js"></script>
 <script>
   const { Humument } = HumumentLib;
   // ... same API as the ESM import
@@ -33,7 +33,7 @@ Load the IIFE bundle from a CDN — it exposes a `HumumentLib` global, so it wor
 `Humument.load` is async; await it, then read everything off the returned `H` instance. The library never loads the page image itself — take `H.page.imageUrl` and load it with your renderer. A complete Canvas2D example:
 
 ```js
-import { Humument } from 'humument-lib'; // CDN: const { Humument } = HumumentLib;
+import { Humument } from 'humument'; // CDN: const { Humument } = HumumentLib;
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');

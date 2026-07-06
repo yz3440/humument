@@ -2,9 +2,15 @@
 
 The CV/OCR pipeline turns the source scanned PDF into the canonical OCR database
 and the normalized page images that the npm packages ship. **Consumers of
-`humument-lib` never run this** — the data is published on npm. You only need the
+`humument` never run this** — the data is published on npm. You only need the
 pipeline to rebuild the dataset (e.g. after swapping the source scan or changing
 the OCR logic).
+
+![Six pages of A Human Document, each shown at the four CV pipeline stages — raw scan, deskewed and cropped, normalized black-and-white, and whitespace-plus-features analysis](assets/pipeline-stages.jpg)
+
+_The stages below across six pages — one row each: **01a** raw scan → **01c**
+deskewed & cropped → **01d** normalized B&W → **01e + 02** word-rarity features +
+whitespace graph. Read a column to follow one page through the pipeline._
 
 ## Requirements
 
@@ -56,6 +62,11 @@ run by the [`Makefile`](https://github.com/yz3440/humument/blob/main/Makefile).
 | **01e** `features` | `01e_features.py` | Tag every word with POS, lemma, frequency, rarity (spaCy + wordfreq). |
 | **02** `whitespace_graph` | `02_whitespace_graph.py` | Whitespace gutters, word docks, and the routing graph used to draw rivers of type. |
 | **03** `export_web` | `03_export_web.py` | Export the DB to static JSON under `output/db/` (catalog, per-page `pNNNN.json` + gzipped twin, search index). This is the payload published as `humument-data`. |
+
+![A grid of normalized page scans sampled across the 367-page book](assets/dataset-grid.jpg)
+
+_The output of stage 01d — 367 normalized B&W pages (a sample spread across the
+book), published as [`humument-images`](data/packages.md)._
 
 ## The canonical database
 

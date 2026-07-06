@@ -5,7 +5,7 @@
 .PHONY: pipeline verify validate test typecheck
 
 # Full pipeline (see pipeline/config.py). Word selection is done client-side in
-# humument-lib, so there is no word-selection stage here. Stage 03 exports the
+# humument, so there is no word-selection stage here. Stage 03 exports the
 # static JSON published as the humument-data npm package.
 pipeline:
 	uv run python pipeline/01a_rasterize.py
