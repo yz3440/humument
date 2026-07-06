@@ -3,7 +3,7 @@
  *
  * Coordinates are pixel coordinates in the page image's native resolution
  * (~1500x2400 @ 300dpi), origin at top-left, y-axis pointing down — same
- * convention as a `<canvas>` or p5's default.
+ * convention as a `<canvas>`.
  */
 
 export interface Pt {

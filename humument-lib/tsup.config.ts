@@ -8,5 +8,4 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   target: 'es2022',
-  external: ['p5'],
 });

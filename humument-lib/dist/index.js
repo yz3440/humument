@@ -43,13 +43,13 @@ function getSearchIndex() {
   return searchP ??= fetchJSON(`${cfg.dataBase}/search-index.json`);
 }
 function getPageRaw(pageNum) {
-  let p2 = pageCache.get(pageNum);
-  if (!p2) {
+  let p = pageCache.get(pageNum);
+  if (!p) {
     const base = `${cfg.dataBase}/pages/p${String(pageNum).padStart(4, "0")}`;
-    p2 = fetchPageJSON(base);
-    pageCache.set(pageNum, p2);
+    p = fetchPageJSON(base);
+    pageCache.set(pageNum, p);
   }
-  return p2;
+  return p;
 }
 
 // src/words.ts
@@ -229,8 +229,8 @@ function passesCandidacy(w, headerLines) {
   return true;
 }
 function tag(w) {
-  const p2 = w.pos ?? "";
-  switch (p2) {
+  const p = w.pos ?? "";
+  switch (p) {
     case "ADP":
     case "DET":
     case "PRON":
@@ -244,7 +244,7 @@ function tag(w) {
     case "PART":
     case "CCONJ":
     case "SCONJ":
-      return p2;
+      return p;
     default:
       return "OTHER";
   }
@@ -356,7 +356,7 @@ function selectChunks(words, opts = {}) {
   }
   const picked = [];
   for (const { c } of pool) {
-    if (picked.every((p2) => Math.abs(c[0].lineIdx - p2[0].lineIdx) >= minDist)) {
+    if (picked.every((p) => Math.abs(c[0].lineIdx - p[0].lineIdx) >= minDist)) {
       picked.push(c);
       if (picked.length >= nSeeds) break;
     }
@@ -437,7 +437,7 @@ function channelPath(seg, opts = {}) {
   return [...top, ...bot.reverse()];
 }
 function sampleCatmullRomWithGutter(pts, gutterIds, step) {
-  if (pts.length < 2) return pts.map((p2) => ({ p: p2, gid: gutterIds[0] ?? -1 }));
+  if (pts.length < 2) return pts.map((p) => ({ p, gid: gutterIds[0] ?? -1 }));
   if (pts.length === 2) {
     const gid = gutterIds[0] ?? -1;
     const out2 = [];
@@ -559,10 +559,10 @@ var MinHeap = class {
     this.a.push(e);
     let i = this.a.length - 1;
     while (i > 0) {
-      const p2 = i - 1 >> 1;
-      if (this.a[p2].cost <= this.a[i].cost) break;
-      [this.a[p2], this.a[i]] = [this.a[i], this.a[p2]];
-      i = p2;
+      const p = i - 1 >> 1;
+      if (this.a[p].cost <= this.a[i].cost) break;
+      [this.a[p], this.a[i]] = [this.a[i], this.a[p]];
+      i = p;
     }
   }
   pop() {
@@ -667,13 +667,13 @@ function flow(start, end, opts) {
   const obstacles = opts.obstacles ?? [];
   const noise2 = makeNoise2D(seed);
   const pts = [{ ...start }];
-  let p2 = { ...start };
+  let p = { ...start };
   const startDist = Math.hypot(end.x - start.x, end.y - start.y);
   let bestDistSeen = startDist;
   let stallCount = 0;
   for (let iter = 0; iter < maxSteps; iter++) {
-    const dxe = end.x - p2.x;
-    const dye = end.y - p2.y;
+    const dxe = end.x - p.x;
+    const dye = end.y - p.y;
     const dist = Math.hypot(dxe, dye);
     if (dist < stepSize * 1.5) break;
     const toTX = dxe / dist;
@@ -692,8 +692,8 @@ function flow(start, end, opts) {
       const theta = k / candidateCount * 2 * Math.PI;
       const cx = Math.cos(theta);
       const cy = Math.sin(theta);
-      const nx = p2.x + stepSize * cx;
-      const ny = p2.y + stepSize * cy;
+      const nx = p.x + stepSize * cx;
+      const ny = p.y + stepSize * cy;
       if (nx < opts.body.x0 || nx > opts.body.x1 || ny < opts.body.y0 || ny > opts.body.y1) continue;
       let blocked = false;
       for (const r of obstacles) {
@@ -714,11 +714,11 @@ function flow(start, end, opts) {
       }
     }
     if (!foundValid) break;
-    p2 = {
-      x: p2.x + stepSize * Math.cos(bestTheta),
-      y: p2.y + stepSize * Math.sin(bestTheta)
+    p = {
+      x: p.x + stepSize * Math.cos(bestTheta),
+      y: p.y + stepSize * Math.sin(bestTheta)
     };
-    pts.push({ ...p2 });
+    pts.push({ ...p });
   }
   pts.push({ ...end });
   return pts;
@@ -726,44 +726,6 @@ function flow(start, end, opts) {
 function obstaclesFrom(words, selectedIds, pad = 1) {
   const sel = new Set(selectedIds);
   return words.filter((w) => !sel.has(w.id)).map((w) => ({ x0: w.x0 - pad, y0: w.y0 - pad, x1: w.x1 + pad, y1: w.y1 + pad }));
-}
-
-// src/draw.ts
-function p(g) {
-  if (g) return g;
-  if (typeof window !== "undefined") return window;
-  throw new Error("No p5 instance provided and no window global available");
-}
-function drawBalloon(words, opts = {}, pInst) {
-  if (!words.length) return;
-  const g = p(pInst);
-  const pts = balloonPath(bboxOf(words), opts);
-  g.beginShape();
-  g.curveVertex(pts[pts.length - 1].x, pts[pts.length - 1].y);
-  for (const pt of pts) g.curveVertex(pt.x, pt.y);
-  g.curveVertex(pts[0].x, pts[0].y);
-  g.curveVertex(pts[1].x, pts[1].y);
-  g.endShape(g.CLOSE);
-}
-function drawRiver(segment, opts = {}, pInst) {
-  if (!segment || segment.points.length < 2) return;
-  const g = p(pInst);
-  const ring = channelPath(segment, opts);
-  if (!ring.length) return;
-  g.beginShape();
-  for (const pt of ring) g.vertex(pt.x, pt.y);
-  g.endShape(g.CLOSE);
-}
-function drawWord(word, pageImage, pInst) {
-  const g = p(pInst);
-  const w = word.x1 - word.x0;
-  const h = word.y1 - word.y0;
-  if (w <= 0 || h <= 0) return;
-  g.image(pageImage, word.x0, word.y0, w, h, word.x0, word.y0, w, h);
-}
-function drawImage(pageImage, pInst) {
-  const g = p(pInst);
-  g.image(pageImage, 0, 0);
 }
 
 // src/index.ts
@@ -774,7 +736,7 @@ var Humument = {
    */
   init,
   /** Loaded data for a single page. The page image isn't preloaded — the
-   *  caller assigns `H.page.image` after `loadImage(H.page.imageUrl)`. */
+   *  caller loads `H.page.imageUrl` with its own renderer. */
   async load(opts) {
     await init({ dataBase: opts.dataBase, imageBase: opts.imageBase });
     const { meta, words, gutters, docks, graph } = await getPageData(opts.page);
@@ -788,8 +750,7 @@ var Humument = {
         height: meta.height,
         body: meta.body,
         valid: meta.valid,
-        imageUrl,
-        image: null
+        imageUrl
       },
       words,
       lines,
@@ -814,16 +775,6 @@ var Humument = {
         penalizeBorders: (margin, penalty) => penalizeBorders(graph, meta.body ?? { x0: 0, y0: 0, x1: meta.width, y1: meta.height }, margin, penalty),
         dijkstra,
         obstaclesFrom
-      },
-      draw: {
-        balloon: (words_, o, p2) => drawBalloon(words_, o, p2),
-        river: (seg, o, p2) => drawRiver(seg, o, p2),
-        word: (w, p2) => {
-          if (inst.page.image) drawWord(w, inst.page.image, p2);
-        },
-        image: (p2) => {
-          if (inst.page.image) drawImage(inst.page.image, p2);
-        }
       },
       geom: {
         balloon: balloonPath,

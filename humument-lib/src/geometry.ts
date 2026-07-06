@@ -1,5 +1,5 @@
 /**
- * Pure geometry helpers — no DOM, no p5. Each returns plain arrays of
+ * Pure geometry helpers — no DOM, no framework. Each returns plain arrays of
  * `{x, y}` points so callers can render with whatever drawing API.
  */
 
@@ -76,7 +76,7 @@ export interface ChannelOptions {
 /**
  * Convert a polyline segment into a thick wavy ribbon — returns the
  * outer polygon as an ordered list of points (top edge then bottom edge
- * reversed) suitable for `beginShape`/`endShape(CLOSE)` in p5.
+ * reversed) suitable for filling as a closed path.
  */
 export function channelPath(seg: ChannelSegment, opts: ChannelOptions = {}): Pt[] {
   const halfWidth   = opts.halfWidth ?? 4;

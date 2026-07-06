@@ -1,28 +1,19 @@
 /**
  * humument-lib — public entry.
  *
- * Quick start (inside the editor):
+ * Renderer-agnostic: every drawing primitive returns plain `{x, y}` point
+ * arrays, so the caller renders with any 2D API (Canvas2D, SVG, WebGL, …).
  *
- *   // `H` is already loaded for the active page.
- *   function setup() {
- *     createCanvas(H.page.width, H.page.height);
- *     if (H.page.image) image(H.page.image, 0, 0);
- *     const phrases = H.selectChunks({ nSeeds: 4, seed: 42 });
- *     for (const ph of phrases) {
- *       fill(255); stroke(0);
- *       H.draw.balloon(ph, { wobble: 0.18 });
- *     }
- *   }
- *
- * Standalone (in a vanilla p5 sketch):
+ * Quick start:
  *
  *   import { Humument } from 'humument-lib';
  *
- *   let H, pageImg;
- *   async function preload() {
- *     H = await Humument.load({ page: 33 });   // data/images come from npm (jsDelivr)
- *     pageImg = loadImage(H.page.imageUrl);
- *   }
+ *   const H = await Humument.load({ page: 33 });  // data/images come from npm (jsDelivr)
+ *   const phrases = H.selectChunks({ nSeeds: 4, seed: 42 });
+ *   const outlines = phrases.map((ph) =>
+ *     H.geom.balloon(H.bboxOf(ph), { wobble: 0.18 }),  // → Pt[]
+ *   );
+ *   // draw H.page.imageUrl and the outlines with your renderer
  *
  * Self-hosting the data instead:
  *
@@ -38,43 +29,31 @@ import {
   chunks as chunksFn, chunkScore, passesCandidacy, selectChunks,
   type ChunksOptions, type SelectChunksOptions,
 } from './chunks.js';
-import {
-  balloonPath, catmullRom, channelPath,
-  type BalloonOptions, type ChannelOptions,
-} from './geometry.js';
+import { balloonPath, catmullRom, channelPath } from './geometry.js';
 import {
   between, dijkstra, flow, obstaclesFrom, penalizeBorders, pickPorts,
   type FlowOptions,
 } from './rivers.js';
 import { makeNoise, makeNoise2D, mulberry32 } from './noise.js';
-import { drawBalloon, drawImage, drawRiver, drawWord } from './draw.js';
 
 import type {
   Bbox, ChannelSegment, Dock, Gutter, HumumentLoadOptions,
   PageGraph, Port, Pt, Word,
 } from './types.js';
 
-import type p5 from 'p5';
-
 /* ---------- the H namespace shape ---------------------------------- */
 
 export interface HumumentInstance {
-  /** Page-level metadata + image. */
+  /** Page-level metadata. */
   page: {
     number: number;
     width: number;
     height: number;
     body: Bbox | null;
     valid: Bbox | null;
-    /** Source URL for the page image. Always set. */
+    /** Source URL for the page image. Always set. The lib never loads the
+     *  image itself — the host fetches/decodes it with its own renderer. */
     imageUrl: string;
-    /**
-     * Page image as a p5.Image. The lib never assigns this — the host
-     * (editor or user sketch) sets it after `loadImage(H.page.imageUrl)`
-     * resolves. The `H.draw.image()` / `H.draw.word()` helpers read
-     * from this slot at call time, so updating it works mid-sketch.
-     */
-    image: p5.Image | null;
   };
 
   /** Words sorted by (lineIdx, x0). */
@@ -102,14 +81,6 @@ export interface HumumentInstance {
     penalizeBorders(margin?: number, penalty?: number): PageGraph;
     dijkstra: typeof dijkstra;
     obstaclesFrom: typeof obstaclesFrom;
-  };
-
-  /** p5-aware drawing sugar. Pass an instance for instance mode; omitted = global. */
-  draw: {
-    balloon(words: Word[], opts?: BalloonOptions, p?: p5): void;
-    river(segment: ChannelSegment, opts?: ChannelOptions, p?: p5): void;
-    word(word: Word, p?: p5): void;
-    image(p?: p5): void;
   };
 
   /** Pure geometry primitives (no drawing). */
@@ -140,7 +111,7 @@ export const Humument = {
   init,
 
   /** Loaded data for a single page. The page image isn't preloaded — the
-   *  caller assigns `H.page.image` after `loadImage(H.page.imageUrl)`. */
+   *  caller loads `H.page.imageUrl` with its own renderer. */
   async load(opts: HumumentLoadOptions): Promise<HumumentInstance> {
     await init({ dataBase: opts.dataBase, imageBase: opts.imageBase });
 
@@ -157,7 +128,6 @@ export const Humument = {
         body: meta.body,
         valid: meta.valid,
         imageUrl,
-        image: null,
       },
       words,
       lines,
@@ -183,12 +153,6 @@ export const Humument = {
           penalizeBorders(graph, meta.body ?? { x0: 0, y0: 0, x1: meta.width, y1: meta.height }, margin, penalty),
         dijkstra,
         obstaclesFrom,
-      },
-      draw: {
-        balloon: (words_, o, p) => drawBalloon(words_, o, p),
-        river:   (seg, o, p)    => drawRiver(seg, o, p),
-        word:    (w, p)         => { if (inst.page.image) drawWord(w, inst.page.image, p); },
-        image:   (p)            => { if (inst.page.image) drawImage(inst.page.image, p); },
       },
       geom: {
         balloon: balloonPath,

@@ -23,7 +23,7 @@ All OCR is local (macOS Vision); no cloud APIs are used.
 
 | Package | What it is | Size (unpacked) |
 | --- | --- | --- |
-| [`humument-lib`](humument-lib) | Erasure-poetry primitives for p5.js (words, OCR boxes, whitespace rivers, balloons). Zero runtime deps; `p5` is an optional peer. | ~230 KB |
+| [`humument-lib`](humument-lib) | Renderer-agnostic erasure-poetry primitives (words, OCR boxes, whitespace rivers, balloon/ribbon geometry). Zero runtime deps. | ~230 KB |
 | [`humument-data`](data-packages/humument-data) | Per-page OCR JSON (words, bboxes, gutters, navigation graph), gzipped. | ~27 MB |
 | [`humument-images`](data-packages/humument-images) | 367 normalized B&W page JPEGs. | ~126 MB |
 
@@ -33,35 +33,39 @@ without hosting anything. Data and images are **separate packages** — and page
 ship **gzipped** — because jsDelivr refuses any package over **150 MB
 unpacked**; keeping them apart holds both comfortably under that ceiling.
 
-## Zero-config example (p5.js)
+## Zero-config example (Canvas2D)
+
+The library is renderer-agnostic — every drawing primitive returns plain
+`{x, y}` point arrays. Here with the browser's built-in Canvas2D:
 
 ```js
 import { Humument } from 'humument-lib'; // CDN: const { Humument } = HumumentLib;
 
-let H = null;
+const ctx = canvas.getContext('2d');
+const H = await Humument.load({ page: 33 });
+canvas.width = H.page.width;
+canvas.height = H.page.height;
 
-function setup() {
-  createCanvas(100, 100); // resized once the page loads
-  noLoop();
-  Humument.load({ page: 33 }).then((h) => {
-    H = h;
-    resizeCanvas(H.page.width, H.page.height);
-    H.page.image = loadImage(H.page.imageUrl, () => redraw());
-  });
-}
+const img = new Image();
+img.crossOrigin = 'anonymous';
+img.src = H.page.imageUrl; // the lib never loads the image itself
+await img.decode();
+ctx.drawImage(img, 0, 0);
 
-function draw() {
-  if (!H || !H.page.image) return;
-  image(H.page.image, 0, 0);
-
-  const phrases = H.selectChunks({ nSeeds: 4, minLineDist: 3, seed: 42 });
-  fill(255); stroke(20);
-  for (const ph of phrases) H.draw.balloon(ph, { wobble: 0.15 });
+ctx.strokeStyle = '#141414';
+ctx.fillStyle = '#ffffff';
+for (const phrase of H.selectChunks({ nSeeds: 4, minLineDist: 3, seed: 42 })) {
+  const outline = H.geom.balloon(H.bboxOf(phrase), { wobble: 0.15 }); // → [{x,y}, …]
+  ctx.beginPath();
+  outline.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
 }
 ```
 
-See [`humument-lib/README.md`](humument-lib/README.md) for the full API, CDN /
-p5 web-editor usage, and the data format.
+See [`humument-lib/README.md`](humument-lib/README.md) for the full API, CDN
+usage, and the data format.
 
 ## The pipeline
 

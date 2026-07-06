@@ -1,5 +1,3 @@
-import p5 from 'p5';
-
 /**
  * Static data layer. The editor ships as a fully static site: instead of
  * loading a SQLite DB in the browser, it fetches small per-page JSON files
@@ -32,7 +30,7 @@ declare function init(opts?: InitOptions): Promise<void>;
  *
  * Coordinates are pixel coordinates in the page image's native resolution
  * (~1500x2400 @ 300dpi), origin at top-left, y-axis pointing down — same
- * convention as a `<canvas>` or p5's default.
+ * convention as a `<canvas>`.
  */
 interface Pt {
     x: number;
@@ -239,7 +237,7 @@ interface SelectChunksOptions extends ChunksOptions {
 }
 
 /**
- * Pure geometry helpers — no DOM, no p5. Each returns plain arrays of
+ * Pure geometry helpers — no DOM, no framework. Each returns plain arrays of
  * `{x, y}` points so callers can render with whatever drawing API.
  */
 
@@ -282,7 +280,7 @@ interface ChannelOptions {
 /**
  * Convert a polyline segment into a thick wavy ribbon — returns the
  * outer polygon as an ordered list of points (top edge then bottom edge
- * reversed) suitable for `beginShape`/`endShape(CLOSE)` in p5.
+ * reversed) suitable for filling as a closed path.
  */
 declare function channelPath(seg: ChannelSegment, opts?: ChannelOptions): Pt[];
 /** Smooth a polyline with Catmull-Rom interpolation. */
@@ -331,28 +329,19 @@ declare function obstaclesFrom(words: Word[], selectedIds: Iterable<number>, pad
 /**
  * humument-lib — public entry.
  *
- * Quick start (inside the editor):
+ * Renderer-agnostic: every drawing primitive returns plain `{x, y}` point
+ * arrays, so the caller renders with any 2D API (Canvas2D, SVG, WebGL, …).
  *
- *   // `H` is already loaded for the active page.
- *   function setup() {
- *     createCanvas(H.page.width, H.page.height);
- *     if (H.page.image) image(H.page.image, 0, 0);
- *     const phrases = H.selectChunks({ nSeeds: 4, seed: 42 });
- *     for (const ph of phrases) {
- *       fill(255); stroke(0);
- *       H.draw.balloon(ph, { wobble: 0.18 });
- *     }
- *   }
- *
- * Standalone (in a vanilla p5 sketch):
+ * Quick start:
  *
  *   import { Humument } from 'humument-lib';
  *
- *   let H, pageImg;
- *   async function preload() {
- *     H = await Humument.load({ page: 33 });   // data/images come from npm (jsDelivr)
- *     pageImg = loadImage(H.page.imageUrl);
- *   }
+ *   const H = await Humument.load({ page: 33 });  // data/images come from npm (jsDelivr)
+ *   const phrases = H.selectChunks({ nSeeds: 4, seed: 42 });
+ *   const outlines = phrases.map((ph) =>
+ *     H.geom.balloon(H.bboxOf(ph), { wobble: 0.18 }),  // → Pt[]
+ *   );
+ *   // draw H.page.imageUrl and the outlines with your renderer
  *
  * Self-hosting the data instead:
  *
@@ -360,22 +349,16 @@ declare function obstaclesFrom(words: Word[], selectedIds: Iterable<number>, pad
  */
 
 interface HumumentInstance {
-    /** Page-level metadata + image. */
+    /** Page-level metadata. */
     page: {
         number: number;
         width: number;
         height: number;
         body: Bbox | null;
         valid: Bbox | null;
-        /** Source URL for the page image. Always set. */
+        /** Source URL for the page image. Always set. The lib never loads the
+         *  image itself — the host fetches/decodes it with its own renderer. */
         imageUrl: string;
-        /**
-         * Page image as a p5.Image. The lib never assigns this — the host
-         * (editor or user sketch) sets it after `loadImage(H.page.imageUrl)`
-         * resolves. The `H.draw.image()` / `H.draw.word()` helpers read
-         * from this slot at call time, so updating it works mid-sketch.
-         */
-        image: p5.Image | null;
     };
     /** Words sorted by (lineIdx, x0). */
     words: Word[];
@@ -401,13 +384,6 @@ interface HumumentInstance {
         penalizeBorders(margin?: number, penalty?: number): PageGraph;
         dijkstra: typeof dijkstra;
         obstaclesFrom: typeof obstaclesFrom;
-    };
-    /** p5-aware drawing sugar. Pass an instance for instance mode; omitted = global. */
-    draw: {
-        balloon(words: Word[], opts?: BalloonOptions, p?: p5): void;
-        river(segment: ChannelSegment, opts?: ChannelOptions, p?: p5): void;
-        word(word: Word, p?: p5): void;
-        image(p?: p5): void;
     };
     /** Pure geometry primitives (no drawing). */
     geom: {
@@ -445,7 +421,7 @@ declare const Humument: {
      */
     init: typeof init;
     /** Loaded data for a single page. The page image isn't preloaded — the
-     *  caller assigns `H.page.image` after `loadImage(H.page.imageUrl)`. */
+     *  caller loads `H.page.imageUrl` with its own renderer. */
     load(opts: HumumentLoadOptions): Promise<HumumentInstance>;
     /** List metadata helpers — usable before `load` for catalog UIs. All async. */
     catalog: {
