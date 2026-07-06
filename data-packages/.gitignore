@@ -1,0 +1,3 @@
+# package payloads are synced from pipeline outputs at publish time (sync.mjs)
+humument-data/db/
+humument-images/pages/

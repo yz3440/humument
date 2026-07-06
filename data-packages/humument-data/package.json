@@ -1,0 +1,26 @@
+{
+  "name": "humument-data",
+  "version": "0.1.0",
+  "description": "Per-page OCR data (words, bboxes, whitespace gutters, navigation graph) for the 1892 one-volume edition of W. H. Mallock's A Human Document — the data layer consumed by humument-lib.",
+  "license": "MIT",
+  "author": "Yufeng Zhao <yufeng-zhao@outlook.com>",
+  "homepage": "https://github.com/yz3440/humument/tree/main/data-packages/humument-data",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yz3440/humument.git",
+    "directory": "data-packages/humument-data"
+  },
+  "keywords": [
+    "a-humument",
+    "tom-phillips",
+    "erasure-poetry",
+    "ocr",
+    "dataset",
+    "creative-coding"
+  ],
+  "files": ["db", "README.md", "LICENSE"],
+  "scripts": {
+    "sync": "node ../sync.mjs data",
+    "prepublishOnly": "node ../sync.mjs data"
+  }
+}
