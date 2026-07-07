@@ -191,10 +191,19 @@ declare function getWords(pageNum: number): Promise<Word[]>;
 declare function listPages(_contentOnly?: boolean): Promise<number[]>;
 declare function listAllPageRefs(): Promise<PageRef[]>;
 declare function listChapters(): Promise<ChapterRef[]>;
-/** Substring search over OCR word tokens. Matches the query against the
- *  lowercased token keys of the prebuilt index (so it stays substring-like,
- *  not stemmed), ranks pages by total hits, and builds a snippet lazily from
- *  each matched page's JSON. */
+/** Full-text search over the OCR text.
+ *
+ *  A single-word query is a substring match against the lowercased token keys
+ *  of the prebuilt index (so it stays substring-like, not stemmed), ranked by
+ *  total hits — no per-page fetch needed for ranking.
+ *
+ *  A multi-word query is treated as a *phrase*: it matches where the query
+ *  appears as consecutive words in reading order within a line. The index is
+ *  used only to narrow the candidate pages (those containing every term); the
+ *  phrase itself is confirmed against each candidate page's actual text.
+ *
+ *  In both cases a snippet is built lazily from the matched page's JSON.
+ *  `opts.limit` defaults to `50`. */
 declare function searchPages(query: string, opts?: {
     limit?: number;
 }): Promise<PageMatch[]>;

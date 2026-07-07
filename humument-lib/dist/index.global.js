@@ -104,9 +104,13 @@ var HumumentLib = (() => {
     return (await getCatalog()).chapters.map((c) => ({ ...c }));
   }
   async function searchPages(query, opts = {}) {
-    const q = query.trim().toLowerCase();
+    const q = query.trim().replace(/\s+/g, " ").toLowerCase();
     if (!q) return [];
     const limit = opts.limit ?? 50;
+    const terms = q.split(" ");
+    return terms.length > 1 ? searchPhrase(q, terms, limit) : searchToken(q, limit);
+  }
+  async function searchToken(q, limit) {
     const index = await getSearchIndex();
     const hitsByPage = /* @__PURE__ */ new Map();
     for (const token in index) {
@@ -116,23 +120,75 @@ var HumumentLib = (() => {
       }
     }
     const ranked = [...hitsByPage.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0]).slice(0, limit);
-    if (!ranked.length) return [];
     return Promise.all(ranked.map(async ([pageNum, hits]) => {
       let snippet = "";
       try {
-        const { words } = await getPageData(pageNum);
-        const i = words.findIndex((w) => w.text.toLowerCase().includes(q));
-        if (i >= 0) {
-          const line = words.filter((w) => w.lineIdx === words[i].lineIdx);
-          const at = line.indexOf(words[i]);
-          const start = Math.max(0, at - 3);
-          const end = Math.min(line.length, at + 4);
-          snippet = (start > 0 ? "\u2026 " : "") + line.slice(start, end).map((w) => w.text).join(" ") + (end < line.length ? " \u2026" : "");
-        }
+        snippet = matchOnPage((await getPageData(pageNum)).words, q).snippet;
       } catch {
       }
       return { pageNum, hits, snippet };
     }));
+  }
+  async function searchPhrase(q, terms, limit) {
+    const index = await getSearchIndex();
+    const perTerm = [];
+    for (const term of terms) {
+      const forTerm = /* @__PURE__ */ new Set();
+      for (const token in index) {
+        if (!token.includes(term)) continue;
+        for (const [page] of index[token]) forTerm.add(page);
+      }
+      if (!forTerm.size) return [];
+      perTerm.push(forTerm);
+    }
+    perTerm.sort((a, b) => a.size - b.size);
+    const candidates = [];
+    perTerm[0].forEach((page) => {
+      if (perTerm.every((s) => s.has(page))) candidates.push(page);
+    });
+    if (!candidates.length) return [];
+    const matched = await Promise.all(
+      candidates.map(async (pageNum) => {
+        try {
+          const { hits, snippet } = matchOnPage((await getPageData(pageNum)).words, q);
+          return hits ? { pageNum, hits, snippet } : null;
+        } catch {
+          return null;
+        }
+      })
+    );
+    return matched.filter((m) => m !== null).sort((a, b) => b.hits - a.hits || a.pageNum - b.pageNum).slice(0, limit);
+  }
+  function matchOnPage(words, q) {
+    let hits = 0;
+    let snippet = "";
+    for (const line of groupByLine(words)) {
+      const texts = line.map((w) => w.text.toLowerCase());
+      const offsets = [];
+      let pos = 0;
+      for (const t of texts) {
+        offsets.push(pos);
+        pos += t.length + 1;
+      }
+      const joined = texts.join(" ");
+      let at = joined.indexOf(q);
+      while (at !== -1) {
+        hits++;
+        if (!snippet) {
+          const endChar = at + q.length - 1;
+          let startWord = 0, endWord = 0;
+          for (let k = 0; k < offsets.length; k++) {
+            if (offsets[k] <= at) startWord = k;
+            if (offsets[k] <= endChar) endWord = k;
+          }
+          const from = Math.max(0, startWord - 3);
+          const to = Math.min(line.length, endWord + 4);
+          snippet = (from > 0 ? "\u2026 " : "") + line.slice(from, to).map((w) => w.text).join(" ") + (to < line.length ? " \u2026" : "");
+        }
+        at = joined.indexOf(q, at + q.length);
+      }
+    }
+    return { hits, snippet };
   }
   function groupByLine(words) {
     const out = [];

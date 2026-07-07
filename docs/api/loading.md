@@ -111,13 +111,16 @@ Chapter-opening pages detected from the OCR (a top line reading
 searchPages(query: string, opts?: { limit?: number }): Promise<PageMatch[]>
 ```
 
-Substring search over the OCR tokens. Ranks pages by total hit count and returns
-`PageMatch = { pageNum, hits, snippet }`, where `snippet` is a short window
-around the first hit on the page. `opts.limit` defaults to `50`. The search index
-is lazy-loaded on first call.
+Full-text search over the OCR text. A single-word query is a substring match
+against the OCR tokens. A multi-word query is treated as a **phrase** — it matches
+where the words appear consecutively, in reading order, within a line. Ranks pages
+by total hit count and returns `PageMatch = { pageNum, hits, snippet }`, where
+`snippet` is a short window around the first hit on the page. `opts.limit` defaults
+to `50`. The search index is lazy-loaded on first call.
 
 ```js
-const hits = await Humument.catalog.searchPages('window', { limit: 10 });
+const hits   = await Humument.catalog.searchPages('window', { limit: 10 });
+const phrase = await Humument.catalog.searchPages('the same', { limit: 10 });
 ```
 
 ### `getWords(page)`
