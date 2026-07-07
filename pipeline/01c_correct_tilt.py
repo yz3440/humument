@@ -441,17 +441,90 @@ def process_chapter_page(page_num, words, targets, db):
 
 
 # ---------------------------------------------------------------------------
+# Deterministic bottom-align for already-corrected pages (no re-OCR)
+# ---------------------------------------------------------------------------
+
+def median_title_body_bottom(db):
+    """Median body-bottom (corrected-space y) over the header-anchored title
+    pages — the line every full page ends on, and the target CHAPTER_PAGES are
+    aligned to. The chapter pages themselves are excluded so they never bias
+    their own target."""
+    ys = [y for (pn, y) in db.execute(
+              "SELECT page_num, body_y1 FROM page_corrections "
+              "WHERE body_y1 IS NOT NULL")
+          if pn not in CHAPTER_PAGES]
+    return statistics.median(ys) if ys else None
+
+
+def realign_bottom(db, page_num, target_bottom):
+    """Translate an already-corrected page — its image and OCR coordinates in
+    lockstep — so the body bottom rests on target_bottom. A pure vertical shift
+    of committed data: deterministic and NOT a re-OCR (Apple Vision is
+    nondeterministic and the DB is a versioned artifact, so the geometry Pass 2
+    would produce is reproduced by translation instead). Returns the applied
+    dy in px, or 0 if there is nothing to move."""
+    row = db.execute(
+        "SELECT body_y1 FROM page_corrections WHERE page_num = ?",
+        (page_num,)).fetchone()
+    if not row or row[0] is None:
+        return 0
+    delta = int(round(target_bottom - row[0]))
+    if delta == 0:
+        return 0
+
+    # image: shift content down by delta — expose paper-white at the top, clip
+    # the (blank) overflow off the bottom. Same size in/out.
+    path = page_img_corrected(page_num)
+    src = Image.open(path).convert("RGB")
+    shifted = Image.new("RGB", src.size, (255, 255, 255))
+    shifted.paste(src, (0, delta))
+    shifted.save(path, quality=80)
+
+    # coordinates move with the pixels. NULL title/body fields (true chapter
+    # pages) stay NULL under +delta; valid_* is re-clipped to the canvas.
+    db.execute(
+        "UPDATE words SET bbox_y0 = bbox_y0 + ?, bbox_y1 = bbox_y1 + ? "
+        "WHERE page_num = ?", (delta, delta, page_num))
+    db.execute(
+        "UPDATE page_corrections SET dy = dy + ?, "
+        "title_y0 = title_y0 + ?, title_y1 = title_y1 + ?, "
+        "body_y0 = body_y0 + ?, body_y1 = body_y1 + ?, "
+        "valid_y0 = MAX(0, valid_y0 + ?), valid_y1 = MIN(?, valid_y1 + ?) "
+        "WHERE page_num = ?",
+        (delta, delta, delta, delta, delta, delta, src.height, delta, page_num))
+    db.commit()
+    return delta
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
 def main():
     ap = argparse.ArgumentParser(description="Stage 1c: two-pass correction")
     ap.add_argument("--pages", help="e.g. '28' or '9-285'. Default: all content pages.")
+    ap.add_argument("--realign", action="store_true",
+                    help="Deterministically bottom-align CHAPTER_PAGES from the "
+                         "committed corrected images + OCR (no re-OCR), then exit. "
+                         "Run 01d/02/03 afterwards to propagate downstream.")
     a = ap.parse_args()
 
     db = sqlite3.connect(DB_PATH)
     init_db(db)
     DIR_PAGES_CORRECTED.mkdir(parents=True, exist_ok=True)
+
+    if a.realign:
+        target = median_title_body_bottom(db)
+        if target is None:
+            print("No title-page body bottoms — nothing to align against")
+            db.close()
+            return
+        print(f"Realign target (median title body bottom): {target:.0f}")
+        for p in sorted(CHAPTER_PAGES):
+            dy = realign_bottom(db, p, target)
+            print(f"  page {p:4d}: dy={dy:+d}")
+        db.close()
+        return
 
     if a.pages:
         total = db.execute("SELECT MAX(page_num) FROM pages").fetchone()[0] or PDF_CONTENT_END

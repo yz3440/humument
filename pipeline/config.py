@@ -36,10 +36,14 @@ PAGE_OFFSET = 9             # raster_index = printed_page + PAGE_OFFSET (measure
 HEADER_TOP_FRAC = 0.067
 # Body region as fractions (top, bottom, left, right).
 BODY_TOP_FRAC, BODY_BOTTOM_FRAC, BODY_LEFT_FRAC, BODY_RIGHT_FRAC = 0.106, 0.972, 0.15, 0.85
-# Empty: this edition prints the "A HUMAN DOCUMENT" running header at the top of
-# EVERY page (chapter openings just add "CHAPTER N" below it), so all pages
-# align as title pages (01c Pass 1) — there are no header-less chapter pages.
-CHAPTER_PAGES: set[int] = set()
+# This edition prints the "A HUMAN DOCUMENT" running header at the top of EVERY
+# page (chapter openings just add "CHAPTER N" below it), so page bodies align as
+# title pages (01c Pass 1) — with one exception. Page 1 (the Introduction) opens
+# on a large *display* title, not the running header; Pass 1 anchors that title
+# near the top and strips the opening sink, leaving the short intro floating
+# above a false blank bottom. It is body-bottom-anchored instead (01c --realign),
+# so its last line rests on the same line every full page ends on.
+CHAPTER_PAGES: set[int] = {1}
 
 
 # === Scan-agnostic constants ================================================

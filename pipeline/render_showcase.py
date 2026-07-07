@@ -20,7 +20,6 @@ from __future__ import annotations
 import json
 import sqlite3
 
-import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 from config import (
@@ -55,35 +54,15 @@ def _font(size: int) -> ImageFont.FreeTypeFont:
     return ImageFont.load_default()
 
 
-def _content_bottom(img: Image.Image, dark: int = 140, min_row: float = 0.015,
-                    bottom_skip: float = 0.05) -> int:
-    """Y of the last row holding real ink (0 → img.height). Ignores the faint
-    grey scan watermark (excluded by the darkness threshold) and any scan-edge
-    artefact in the bottom margin (excluded by bottom_skip), so a short page like
-    a chapter opener reports where its text actually ends, not the page edge."""
-    g = np.asarray(img.convert("L"))
-    lim = int(g.shape[0] * (1 - bottom_skip))
-    rows = np.where((g[:lim] < dark).mean(axis=1) > min_row)[0]
-    return int(rows.max()) + 1 if len(rows) else img.height
-
-
-def _contain(img: Image.Image, box_w: int, box_h: int,
-             baseline: float | None = None) -> Image.Image:
-    """Fit img inside (box_w, box_h) preserving aspect, centred horizontally on
-    paper. When baseline (a y within the box) is given, the image's last inked
-    row is placed on it instead of centring the whole sheet — used for the short
-    chapter-opening page so its final line rests on the same line the neighbouring
-    full pages end on, at the same scale, rather than floating above a big gap."""
+def _contain(img: Image.Image, box_w: int, box_h: int) -> Image.Image:
+    """Fit img inside (box_w, box_h) preserving aspect, centred on paper."""
     scale = min(box_w / img.width, box_h / img.height)
     resized = img.resize(
         (max(1, round(img.width * scale)), max(1, round(img.height * scale))),
         Image.LANCZOS,
     )
     panel = Image.new("RGB", (box_w, box_h), PAPER)
-    ox = (box_w - resized.width) // 2
-    oy = (round(baseline - _content_bottom(img) * scale) if baseline is not None
-          else (box_h - resized.height) // 2)
-    panel.paste(resized, (ox, oy))
+    panel.paste(resized, ((box_w - resized.width) // 2, (box_h - resized.height) // 2))
     return panel
 
 
@@ -176,17 +155,9 @@ def pipeline_stages(db: sqlite3.Connection, pages: list[int]) -> Image.Image:
         lb = draw.multiline_textbbox((0, 0), label, font=label_font, spacing=6, align="right")
         draw.multiline_text((pad + gutter - 18 - (lb[2] - lb[0]), y + (cell_h - (lb[3] - lb[1])) // 2 - lb[1]),
                             label, fill=INK, font=label_font, spacing=6, align="right")
-        imgs = [load(pn) for pn in pages]
-        # the first column is the book's opening page — a chapter head whose text
-        # fills only the upper part of the sheet. Rest its last line on the median
-        # last-line height of the neighbouring full pages (same scale — every page
-        # in a stage shares a size) so it aligns with them instead of floating
-        # above a big gap or being slammed to the frame floor.
-        scale = min(cell_w / imgs[0].width, cell_h / imgs[0].height)
-        baseline = float(np.median([_content_bottom(im) * scale for im in imgs[1:]]))
-        for c, im in enumerate(imgs):
+        for c, pn in enumerate(pages):
             x = x0 + c * (cell_w + gap)
-            grid.paste(_contain(im, cell_w, cell_h, baseline if c == 0 else None), (x, y))
+            grid.paste(_contain(load(pn), cell_w, cell_h), (x, y))
             draw.rectangle([x, y, x + cell_w - 1, y + cell_h - 1], outline=(228, 228, 233), width=1)
 
     return grid
