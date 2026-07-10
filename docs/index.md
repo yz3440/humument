@@ -44,7 +44,7 @@ All OCR is local (macOS Vision); no cloud APIs are used.
 
 | Package | What it is | Size (unpacked) |
 | --- | --- | --- |
-| [`humument`](api/index.md) | Renderer-agnostic erasure-poetry primitives (words, OCR boxes, whitespace rivers, balloon/ribbon geometry). Zero runtime deps. | ~230 KB |
+| [`humument`](api/index.md) | Renderer-agnostic erasure-poetry primitives (words, OCR boxes, whitespace rivers, blob/balloon/banner/ribbon geometry). Zero runtime deps. | ~230 KB |
 | [`humument-data`](data/packages.md) | Per-page OCR JSON (words, bboxes, gutters, navigation graph), gzipped. | ~27 MB |
 | [`humument-images`](data/packages.md) | 367 normalized B&W page JPEGs. | ~126 MB |
 

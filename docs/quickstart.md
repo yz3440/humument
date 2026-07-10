@@ -89,6 +89,24 @@ for (const phrase of H.selectChunks({ nSeeds: 4, minLineDist: 3, seed: 42 })) {
 The same pattern renders to SVG, WebGL, or a server-side canvas — `H.geom.*`
 returns points, and you draw them however you like (see [Geometry](api/geometry.md)).
 
+## Draw a faithful blob chain
+
+For the true A Humument look, fuse the phrases into **one text-hugging
+silhouette** with `H.geom.blob` (0.2.0) — tight hulls around every word,
+joined by tapered necks:
+
+```js
+const phrases = H.selectChunks({ nSeeds: 4, minLineDist: 3, seed: 42 });
+const spec = H.geom.blobSpec(phrases);            // auto-necks between phrases
+for (const loop of H.geom.blob(spec, { pad: 8, blend: 10, seed: 7 })) {
+  ctx.beginPath();
+  loop.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+  ctx.closePath();
+  ctx.fill();   // fill + stroke one path = one ink rim
+  ctx.stroke();
+}
+```
+
 ## Draw a river
 
 Connect two words with a whitespace river, then fill its ribbon:

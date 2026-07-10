@@ -84,13 +84,22 @@ ways ([Rivers](api/rivers.md)):
   biased toward the target and away from obstacle words. Organic, and a good
   fallback when the graph can't connect two words (island gutters).
 
-## Balloons and ribbons
+## Blobs, balloons, banners, and ribbons
 
-The geometry helpers turn bounding boxes and river paths into point arrays you
-can render with any 2D API:
+The geometry helpers turn words, bounding boxes, and river paths into point
+arrays you can render with any 2D API:
 
-- A **balloon** (`H.geom.balloon`) is a wobbly closed loop around a word or
-  phrase's bounding box — the outline you'd ink around a kept fragment.
+- A **blob** (`H.geom.blob`, 0.2.0) is the faithful A Humument balloon: a tight
+  hull hugging every word, with consecutive phrases fused into **one organic
+  silhouette** by tapered necks that flare where they attach. Built as a
+  signed-distance union traced with marching squares. Multi-line phrases come
+  out as stepped, concave hulls — the shape Phillips actually cuts.
+- A **balloon** (`H.geom.balloon`) is a simple wobbly closed loop around a
+  bounding box — always convex, and much cheaper than a blob; use it for
+  animated, per-frame drawing.
+- A **banner** (`H.geom.banner`, 0.2.0) is an angular pennant strip with
+  square, pointed, or swallowtail-notched ends — the paper-ribbon dialogue
+  shapes of p15.
 - A **channel / ribbon** (`H.geom.channel`) turns a river `ChannelSegment` into a
   thick wavy band that meanders within its gutter.
 

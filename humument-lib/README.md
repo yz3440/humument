@@ -4,7 +4,7 @@ Renderer-agnostic Phillips-style erasure-poetry primitives over W. H. Mallock's 
 
 This is the canonical toolkit for making computational _Humument_-type work: the full book — every page's words, OCR boxes, whitespace geometry — ships on npm ([humument-data](https://www.npmjs.com/package/humument-data), [humument-images](https://www.npmjs.com/package/humument-images)) and loads with zero configuration.
 
-Loads a single page's words, OCR boxes, line groupings, whitespace gutters, and a navigation graph; provides a POS-pattern phrase chunker, two river-pathfinders, and balloon/ribbon geometry. Every drawing primitive returns plain `{x, y}` point arrays — render them with any 2D API (Canvas2D, SVG, WebGL, a server-side canvas, …).
+Loads a single page's words, OCR boxes, line groupings, whitespace gutters, and a navigation graph; provides a POS-pattern phrase chunker, two river-pathfinders, and blob/balloon/banner/ribbon geometry. Every drawing primitive returns plain `{x, y}` point arrays — render them with any 2D API (Canvas2D, SVG, WebGL, a server-side canvas, …).
 
 ## Install
 
@@ -62,6 +62,24 @@ for (const phrase of H.selectChunks({ nSeeds: 4, minLineDist: 3, seed: 42 })) {
 }
 ```
 
+For the faithful A Humument silhouette, fuse the phrases into **one text-hugging
+blob** — tight hulls around every word, joined by tapered necks (`v0.2.0`):
+
+```js
+const phrases = H.selectChunks({ nSeeds: 4, minLineDist: 3, seed: 42 });
+const spec = H.geom.blobSpec(phrases);            // auto-necks between phrases
+for (const loop of H.geom.blob(spec, { pad: 8, blend: 10, seed: 7 })) { // → [{x,y}, …][]
+  ctx.beginPath();
+  loop.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+  ctx.closePath();
+  ctx.fill();   // fill + stroke one path = one ink rim
+  ctx.stroke();
+}
+```
+
+(`H.geom.balloon` stays the cheap analytic loop for animated / per-frame drawing;
+`blob` is the faithful shape for one-shot page renders.)
+
 Rivers work the same way — pathfind, turn the path into a ribbon polygon, fill it:
 
 ```js
@@ -88,7 +106,9 @@ Pass `dataBase`/`imageBase` to `Humument.load`/`Humument.init` to override the C
 - `H.selectChunks(opts)` — top-N chunks distributed by line distance
 - `H.river.between(a, b)` — Dijkstra over the whitespace graph
 - `H.river.flow(a, b, opts)` — Perlin walker
-- `H.geom.balloon(bbox, opts)` / `H.geom.channel(seg, opts)` / `H.geom.catmullRom(pts)` — pure geometry, returns `{x, y}` arrays
+- `H.geom.blob(spec, opts)` / `H.geom.blobSpec(groups, opts)` / `H.geom.blobField(spec, opts)` — text-hugging blob silhouettes (word hulls fused by tapered necks)
+- `H.geom.banner(bbox, opts)` — angular pennant strips (square/point/swallowtail ends)
+- `H.geom.balloon(bbox, opts)` / `H.geom.channel(seg, opts)` / `H.geom.catmullRom(pts)` — simple balloon, river ribbon, spline — pure geometry, returns `{x, y}` arrays
 - `H.noise(seed)` / `H.noise2D(seed)` / `H.random(seed)`
 
 Catalog helpers (all async; usable before `load`): `Humument.init({ dataBase, imageBase })`, then `Humument.catalog.listPages()` / `listChapters()` / `searchPages(q)` / `getWords(page)` / `pageImageUrl(page)`.

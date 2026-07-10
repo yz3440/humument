@@ -35,7 +35,9 @@ surface (which is usable before any page is loaded).
 | `H.river.between(a, b)` | Dijkstra river over the whitespace graph. | [Rivers](rivers.md) |
 | `H.river.flow(a, b, opts)` | Perlin-field river walker. | [Rivers](rivers.md) |
 | `H.river.pickPorts / penalizeBorders / dijkstra / obstaclesFrom` | River building blocks. | [Rivers](rivers.md) |
-| `H.geom.balloon / channel / catmullRom` | Pure geometry — returns `{x,y}` arrays, no renderer. | [Geometry](geometry.md) |
+| `H.geom.blob / blobSpec / blobField` | Text-hugging blob silhouettes — word hulls fused by tapered necks (the faithful balloon). | [Geometry](geometry.md#blob) |
+| `H.geom.banner` | Angular pennant strips (square/point/swallowtail ends). | [Geometry](geometry.md#banner) |
+| `H.geom.balloon / channel / catmullRom` | Simple balloon, river ribbon, spline — returns `{x,y}` arrays, no renderer. | [Geometry](geometry.md) |
 | `H.noise / noise2D / random` | Seedable value-noise + PRNG. | [Noise & Random](noise.md) |
 | `H.POS`, `H.HEAD(w)`, `H.MOD(w)` | UPOS tag constants and helpers. | [Chunks](chunks.md#pos-helpers) |
 
@@ -56,7 +58,9 @@ Canvas2D, SVG, WebGL, or a server-side canvas (see [Geometry](geometry.md)).
 
 All shapes (`Word`, `Bbox`, `Pt`, `PageMeta`, `PageRef`, `Gutter`, `Dock`,
 `Port`, `Compass`, `GraphNode`, `PageGraph`, `ChannelSegment`, `ChapterRef`,
-`PageMatch`, `HumumentLoadOptions`, `BalloonOptions`, `ChannelOptions`,
-`ChunksOptions`, `SelectChunksOptions`, `FlowOptions`) are exported from the
-package entry and documented alongside the methods that use them. The canonical definitions live in
+`PageMatch`, `HumumentLoadOptions`, `BalloonOptions`, `BannerOptions`,
+`BannerEnd`, `BlobSpec`, `BlobCapsule`, `BlobOptions`, `BlobSpecOptions`,
+`ChannelOptions`, `ChunksOptions`, `SelectChunksOptions`, `FlowOptions`) are
+exported from the package entry and documented alongside the methods that use
+them. The canonical definitions live in
 [`src/types.ts`](https://github.com/yz3440/humument/blob/main/humument-lib/src/types.ts).
