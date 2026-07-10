@@ -9,7 +9,9 @@ __pycache__/
 .uv/
 
 # Project outputs
+# *.mp4 = render_showcase.py --video output (regenerable, large)
 *.zip
+*.mp4
 data/*
 !data/humument.db
 !data/pages_corrected/
