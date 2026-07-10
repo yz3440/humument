@@ -29,7 +29,8 @@ import {
   chunks as chunksFn, chunkScore, passesCandidacy, selectChunks,
   type ChunksOptions, type SelectChunksOptions,
 } from './chunks.js';
-import { balloonPath, catmullRom, channelPath } from './geometry.js';
+import { balloonPath, bannerPath, catmullRom, channelPath } from './geometry.js';
+import { blobField, blobPath, blobSpecFromWords } from './blob.js';
 import {
   between, dijkstra, flow, obstaclesFrom, penalizeBorders, pickPorts,
   type FlowOptions,
@@ -88,6 +89,15 @@ export interface HumumentInstance {
     balloon: typeof balloonPath;
     channel: typeof channelPath;
     catmullRom: typeof catmullRom;
+    /** Text-hugging blob outline(s): SDF union of word rects + tapered
+     *  neck capsules, marched at the zero isoline. -> Pt[][] */
+    blob: typeof blobPath;
+    /** Build a BlobSpec from ordered word groups (auto-necks). */
+    blobSpec: typeof blobSpecFromWords;
+    /** The blob's signed-distance field, for clearance probing. */
+    blobField: typeof blobField;
+    /** Angular pennant/banner strip (p15-style dialogue ribbons). */
+    banner: typeof bannerPath;
   };
 
   /** Noise utilities. */
@@ -158,6 +168,10 @@ export const Humument = {
         balloon: balloonPath,
         channel: channelPath,
         catmullRom,
+        blob: blobPath,
+        blobSpec: blobSpecFromWords,
+        blobField,
+        banner: bannerPath,
       },
       noise:   makeNoise,
       noise2D: makeNoise2D,
@@ -191,6 +205,9 @@ export type {
   HumumentLoadOptions, PageGraph, PageMatch, PageMeta, PageRef, Port, Pt, Word,
 } from './types.js';
 export { CDN_DATA_BASE, CDN_IMAGE_BASE } from './data.js';
-export type { BalloonOptions, ChannelOptions } from './geometry.js';
+export type { BalloonOptions, BannerEnd, BannerOptions, ChannelOptions } from './geometry.js';
+export type { BlobCapsule, BlobOptions, BlobSpec, BlobSpecOptions } from './blob.js';
+export { blobPath, blobField, blobSpecFromWords } from './blob.js';
+export { bannerPath } from './geometry.js';
 export type { ChunksOptions, SelectChunksOptions } from './chunks.js';
 export type { FlowOptions } from './rivers.js';

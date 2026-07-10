@@ -292,8 +292,126 @@ interface ChannelOptions {
  * reversed) suitable for filling as a closed path.
  */
 declare function channelPath(seg: ChannelSegment, opts?: ChannelOptions): Pt[];
+type BannerEnd = 'square' | 'point' | 'swallowtail';
+interface BannerOptions {
+    /** Extra px of padding beyond the bbox edges. Default 6. */
+    pad?: number;
+    /** End style, or [left, right] per end. Default 'swallowtail'. */
+    ends?: BannerEnd | [BannerEnd, BannerEnd];
+    /** How far an end extends beyond the padded bbox (px).
+     *  Default 0.55 x banner height. */
+    endLength?: number;
+    /** Swallowtail notch depth as a fraction of `endLength`. Default 0.65. */
+    notch?: number;
+    /** Total x-shear from top edge to bottom edge (px). Default 0. */
+    skew?: number;
+    /** Rotation about the banner centre (radians). Default 0. */
+    angle?: number;
+    /** Hand-cut wobble on the long edges only (px) — end vertices stay crisp.
+     *  Default 1.2. */
+    wobble?: number;
+    /** Wobble frequency in cycles per px along the edge. Default 0.03. */
+    wobbleFreq?: number;
+    /** Long-edge densification step (px). Default 4. */
+    step?: number;
+    /** PRNG seed. Default 0. */
+    seed?: number;
+}
+/**
+ * Angular pennant/banner strip around a text-line bbox — the paper-ribbon
+ * shapes of A Humument p15's dialogue: straight long edges, ends cut square,
+ * to a point, or with an inward swallowtail notch. Returns polygon vertices
+ * (clockwise in screen coords, matching blobPath outers).
+ */
+declare function bannerPath(bbox: Bbox, opts?: BannerOptions): Pt[];
 /** Smooth a polyline with Catmull-Rom interpolation. */
 declare function catmullRom(points: Pt[], tension?: number, samplesPerSegment?: number): Pt[];
+
+/**
+ * Text-hugging blob outlines — the silhouette language of A Humument's
+ * "kept word" balloons.
+ *
+ * Phillips's balloons are not ellipses: each phrase is a tight hull hugging
+ * its words (union of padded rounded rects, so multi-line phrases read as
+ * stepped, concave lobes), and consecutive phrases merge into ONE organic
+ * silhouette through tapered necks that flare where they attach. This module
+ * reproduces that construction:
+ *
+ *   signed-distance union of (rounded word rects + tapered capsule necks)
+ *   -> marching squares at the zero isoline
+ *   -> resample / box-smooth / hand-cut wobble along the field gradient
+ *
+ * Pure geometry — returns plain `Pt[][]` contours (outer loops and holes
+ * carry opposite windings, ready for nonzero-winding fill). No DOM.
+ */
+
+/** A neck between phrase hulls: a spine polyline swept with a (possibly
+ *  tapered) width. `width` is the FULL width in px — a scalar `w` expands to
+ *  `[w, 0.55*w, w]`, the classic pinched neck. */
+interface BlobCapsule {
+    points: Pt[];
+    width: number | [number, number, number];
+}
+/** Input geometry for one blob (one balloon or one connected chain).
+ *  Everything in a single spec is allowed to fuse — call `blobPath` once per
+ *  balloon/chain; never batch unrelated balloons into one spec. */
+interface BlobSpec {
+    /** Word (or line-run) bboxes to hug. `Word` satisfies `Bbox` structurally. */
+    rects: Bbox[];
+    /** Neck spines connecting the hulls. */
+    capsules?: BlobCapsule[];
+}
+interface BlobOptions {
+    /** Outward offset from the rects (px). Corners round by this much for free
+     *  (SDF offsetting). Default 6. */
+    pad?: number;
+    /** Extra corner rounding on top of `pad`. Default 0. */
+    cornerRadius?: number;
+    /** Smooth-union radius (px): necks and stacked lines flare into each other
+     *  instead of meeting at a crease. 0 = hard union. Default 8. */
+    blend?: number;
+    /** Max sample-grid cell size (px). Auto-clamped down for small blobs and
+     *  so the thinnest capsule spans >= 4 cells. Default 3. */
+    cell?: number;
+    /** Output vertex spacing along the contour (px). Default 2.5. */
+    resample?: number;
+    /** Box-filter smoothing passes over the contour. Default 2. */
+    smooth?: number;
+    /** Hand-cut wobble amplitude along the outward normal (px). Default 2. */
+    wobble?: number;
+    /** Wobble frequency in cycles per px of arc length. Default 0.02. */
+    wobbleFreq?: number;
+    /** PRNG seed. Default 0. */
+    seed?: number;
+}
+/**
+ * The union field itself — `(x, y) -> signed distance` (negative inside).
+ * Useful for probing clearance between separately drawn balloons.
+ */
+declare function blobField(spec: BlobSpec, opts?: BlobOptions): (x: number, y: number) => number;
+/**
+ * Outline(s) of the blob: closed contours sorted by |area| descending
+ * (`result[0]` is the main silhouette). Outer loops and holes carry opposite
+ * windings, so nonzero-winding fill renders holes correctly.
+ */
+declare function blobPath(spec: BlobSpec, opts?: BlobOptions): Pt[][];
+interface BlobSpecOptions {
+    /** Neck full width: scalar or [start, mid, end]. Default derives from the
+     *  anchor words' line height: `[0.5*h, 0.28*h, 0.5*h]`, floored at 10px. */
+    neckWidth?: number | [number, number, number];
+    /** Perpendicular bow of the neck spine as a fraction of the chord length.
+     *  Sign alternates pseudo-randomly per neck. Default 0.22. */
+    bow?: number;
+    /** PRNG seed for bow direction. Default 0. */
+    seed?: number;
+}
+/**
+ * Build a `BlobSpec` from ordered word groups: rects from every word, plus a
+ * tapered neck between each consecutive pair of groups, anchored at the last
+ * word of one group and the first word of the next (how Phillips attaches
+ * them). Hand-build the spec instead when you need custom routing.
+ */
+declare function blobSpecFromWords(groups: Word[][], opts?: BlobSpecOptions): BlobSpec;
 
 /**
  * River pathfinding — two strategies:
@@ -399,6 +517,15 @@ interface HumumentInstance {
         balloon: typeof balloonPath;
         channel: typeof channelPath;
         catmullRom: typeof catmullRom;
+        /** Text-hugging blob outline(s): SDF union of word rects + tapered
+         *  neck capsules, marched at the zero isoline. -> Pt[][] */
+        blob: typeof blobPath;
+        /** Build a BlobSpec from ordered word groups (auto-necks). */
+        blobSpec: typeof blobSpecFromWords;
+        /** The blob's signed-distance field, for clearance probing. */
+        blobField: typeof blobField;
+        /** Angular pennant/banner strip (p15-style dialogue ribbons). */
+        banner: typeof bannerPath;
     };
     /** Noise utilities. */
     noise(seed: number): (x: number) => number;
@@ -443,4 +570,4 @@ declare const Humument: {
     };
 };
 
-export { type BalloonOptions, type Bbox, CDN_DATA_BASE, CDN_IMAGE_BASE, type ChannelOptions, type ChannelSegment, type ChapterRef, type ChunksOptions, type Compass, type Dock, type FlowOptions, type GraphNode, type Gutter, Humument, type HumumentInstance, type HumumentLoadOptions, type PageGraph, type PageMatch, type PageMeta, type PageRef, type Port, type Pt, type SelectChunksOptions, type Word };
+export { type BalloonOptions, type BannerEnd, type BannerOptions, type Bbox, type BlobCapsule, type BlobOptions, type BlobSpec, type BlobSpecOptions, CDN_DATA_BASE, CDN_IMAGE_BASE, type ChannelOptions, type ChannelSegment, type ChapterRef, type ChunksOptions, type Compass, type Dock, type FlowOptions, type GraphNode, type Gutter, Humument, type HumumentInstance, type HumumentLoadOptions, type PageGraph, type PageMatch, type PageMeta, type PageRef, type Port, type Pt, type SelectChunksOptions, type Word, bannerPath, blobField, blobPath, blobSpecFromWords };

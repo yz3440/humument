@@ -182,6 +182,110 @@ function sampleCatmullRomWithGutter(
   return out;
 }
 
+/* ---------- banner / pennant strip --------------------------------- */
+
+export type BannerEnd = 'square' | 'point' | 'swallowtail';
+
+export interface BannerOptions {
+  /** Extra px of padding beyond the bbox edges. Default 6. */
+  pad?: number;
+  /** End style, or [left, right] per end. Default 'swallowtail'. */
+  ends?: BannerEnd | [BannerEnd, BannerEnd];
+  /** How far an end extends beyond the padded bbox (px).
+   *  Default 0.55 x banner height. */
+  endLength?: number;
+  /** Swallowtail notch depth as a fraction of `endLength`. Default 0.65. */
+  notch?: number;
+  /** Total x-shear from top edge to bottom edge (px). Default 0. */
+  skew?: number;
+  /** Rotation about the banner centre (radians). Default 0. */
+  angle?: number;
+  /** Hand-cut wobble on the long edges only (px) — end vertices stay crisp.
+   *  Default 1.2. */
+  wobble?: number;
+  /** Wobble frequency in cycles per px along the edge. Default 0.03. */
+  wobbleFreq?: number;
+  /** Long-edge densification step (px). Default 4. */
+  step?: number;
+  /** PRNG seed. Default 0. */
+  seed?: number;
+}
+
+/**
+ * Angular pennant/banner strip around a text-line bbox — the paper-ribbon
+ * shapes of A Humument p15's dialogue: straight long edges, ends cut square,
+ * to a point, or with an inward swallowtail notch. Returns polygon vertices
+ * (clockwise in screen coords, matching blobPath outers).
+ */
+export function bannerPath(bbox: Bbox, opts: BannerOptions = {}): Pt[] {
+  const pad = opts.pad ?? 6;
+  const x0 = bbox.x0 - pad;
+  const x1 = bbox.x1 + pad;
+  const y0 = bbox.y0 - pad;
+  const y1 = bbox.y1 + pad;
+  const h = y1 - y0;
+  const cy = (y0 + y1) / 2;
+  const cx = (x0 + x1) / 2;
+
+  const ends = opts.ends ?? 'swallowtail';
+  const [leftEnd, rightEnd]: [BannerEnd, BannerEnd] =
+    Array.isArray(ends) ? ends : [ends, ends];
+  const e = opts.endLength ?? 0.55 * h;
+  const depth = (opts.notch ?? 0.65) * e;
+  const skew = opts.skew ?? 0;
+  const angle = opts.angle ?? 0;
+  const wobble = opts.wobble ?? 1.2;
+  const wobbleFreq = opts.wobbleFreq ?? 0.03;
+  const step = opts.step ?? 4;
+  const noise = makeNoise(opts.seed ?? 0);
+
+  // End vertex runs, top-to-bottom on the right, bottom-to-top on the left.
+  const rightRun: Pt[] =
+    rightEnd === 'square' ? [{ x: x1, y: y0 }, { x: x1, y: y1 }]
+    : rightEnd === 'point' ? [{ x: x1, y: y0 }, { x: x1 + e, y: cy }, { x: x1, y: y1 }]
+    : [{ x: x1 + e, y: y0 }, { x: x1 + e - depth, y: cy }, { x: x1 + e, y: y1 }];
+  const leftRun: Pt[] =
+    leftEnd === 'square' ? [{ x: x0, y: y1 }, { x: x0, y: y0 }]
+    : leftEnd === 'point' ? [{ x: x0, y: y1 }, { x: x0 - e, y: cy }, { x: x0, y: y0 }]
+    : [{ x: x0 - e, y: y1 }, { x: x0 - e + depth, y: cy }, { x: x0 - e, y: y0 }];
+
+  // Long edges densified + wobbled in y; corner vertices stay exact.
+  const edge = (ax: number, bx: number, y: number, phase: number): Pt[] => {
+    const out: Pt[] = [];
+    const len = Math.abs(bx - ax);
+    const n = Math.max(1, Math.round(len / step));
+    for (let i = 1; i < n; i++) {
+      const t = i / n;
+      const x = ax + (bx - ax) * t;
+      out.push({ x, y: y + noise(Math.abs(x - x0) * wobbleFreq + phase) * wobble });
+    }
+    return out;
+  };
+
+  const topLeft = leftRun[leftRun.length - 1];
+  const topRight = rightRun[0];
+  const bottomRight = rightRun[rightRun.length - 1];
+  const bottomLeft = leftRun[0];
+
+  const pts: Pt[] = [
+    ...leftRun,
+    ...edge(topLeft.x, topRight.x, y0, 0),
+    ...rightRun,
+    ...edge(bottomRight.x, bottomLeft.x, y1, 100),
+  ];
+
+  // Shear, then rotate about the centre.
+  const ca = Math.cos(angle);
+  const sa = Math.sin(angle);
+  return pts.map((p) => {
+    const sx = p.x + skew * ((p.y - cy) / h);
+    if (!angle) return { x: sx, y: p.y };
+    const dx = sx - cx;
+    const dy = p.y - cy;
+    return { x: cx + dx * ca - dy * sa, y: cy + dx * sa + dy * ca };
+  });
+}
+
 /** Smooth a polyline with Catmull-Rom interpolation. */
 export function catmullRom(points: Pt[], tension = 0.5, samplesPerSegment = 12): Pt[] {
   if (points.length < 3) return points.slice();
