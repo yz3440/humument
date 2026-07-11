@@ -495,8 +495,18 @@ surface (which is usable before any page is loaded).</p>
 <td><a href="rivers/">Rivers</a></td>
 </tr>
 <tr>
+<td><code>H.geom.blob / blobSpec / blobField</code></td>
+<td>Text-hugging blob silhouettes — word hulls fused by tapered necks (the faithful balloon).</td>
+<td><a href="geometry/#blob">Geometry</a></td>
+</tr>
+<tr>
+<td><code>H.geom.banner</code></td>
+<td>Angular pennant strips (square/point/swallowtail ends).</td>
+<td><a href="geometry/#banner">Geometry</a></td>
+</tr>
+<tr>
 <td><code>H.geom.balloon / channel / catmullRom</code></td>
-<td>Pure geometry — returns <code>{x,y}</code> arrays, no renderer.</td>
+<td>Simple balloon, river ribbon, spline — returns <code>{x,y}</code> arrays, no renderer.</td>
 <td><a href="geometry/">Geometry</a></td>
 </tr>
 <tr>
@@ -525,9 +535,11 @@ Canvas2D, SVG, WebGL, or a server-side canvas (see <a href="geometry/">Geometry<
 <h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link">#</a></h2>
 <p>All shapes (<code>Word</code>, <code>Bbox</code>, <code>Pt</code>, <code>PageMeta</code>, <code>PageRef</code>, <code>Gutter</code>, <code>Dock</code>,
 <code>Port</code>, <code>Compass</code>, <code>GraphNode</code>, <code>PageGraph</code>, <code>ChannelSegment</code>, <code>ChapterRef</code>,
-<code>PageMatch</code>, <code>HumumentLoadOptions</code>, <code>BalloonOptions</code>, <code>ChannelOptions</code>,
-<code>ChunksOptions</code>, <code>SelectChunksOptions</code>, <code>FlowOptions</code>) are exported from the
-package entry and documented alongside the methods that use them. The canonical definitions live in
+<code>PageMatch</code>, <code>HumumentLoadOptions</code>, <code>BalloonOptions</code>, <code>BannerOptions</code>,
+<code>BannerEnd</code>, <code>BlobSpec</code>, <code>BlobCapsule</code>, <code>BlobOptions</code>, <code>BlobSpecOptions</code>,
+<code>ChannelOptions</code>, <code>ChunksOptions</code>, <code>SelectChunksOptions</code>, <code>FlowOptions</code>) are
+exported from the package entry and documented alongside the methods that use
+them. The canonical definitions live in
 <a href="https://github.com/yz3440/humument/blob/main/humument-lib/src/types.ts"><code>src/types.ts</code></a>.</p>
 </section>
 
